@@ -11,11 +11,17 @@ NA2zero <- function (x) {
   x[is.nan(x)] <- 0
   return(x)
 }
+
+#' loads an RData file use variablename<-LoadFileInVariable(filename) 
+LoadFileInVariable <- function(fileName){
+  load(fileName)
+  get(ls()[ls() != "fileName"])
+}
+
+
+
+#' Reads a list from a ; separated data file made by WriteListPointComma or Microsoft Excel
 ReadListPointComma<-function(filename="WriteListPointComma.csv"){
-  #' Leest een lijst uit een ; separated value csv bestand
-  # gemaakt door WriteListPointComma
-  # een oude versie was:
-  # output <- read.csv(file = filename, header = TRUE, sep = ";", quote = "", na.strings = "NA", comment.char = "",,stringsAsFactors=FALSE)
   output<-  try(read.csv(file = filename,
                          header = TRUE, sep = ";", quote = "\"",
                          na.strings = c("NA","NaN"),
@@ -27,6 +33,17 @@ ReadListPointComma<-function(filename="WriteListPointComma.csv"){
   return(output)
 }
 
+#' Writes a list to a ; separated data file easy to read by WriteListPointComma or Microsoft Excel
+WriteListPointComma<-function(inlist,filename="WriteListPointComma.csv"){
+  inlist=as.data.frame(inlist)
+  write.table(inlist,filename, sep=';',
+              fileEncoding="UTF-8",
+              quote =TRUE,
+              qmethod = 'double',
+              row.names=FALSE,
+              dec='.',
+              eol="\n")
+}
 
 MaakKolomMeth<-function(LMM_broad_input_dataframe=LMM_broad_input_dataframe,celcius=celcius,add_bicarbonate=add_bicarbonate,add_phosphate=add_phosphate){
   #' voorbereiding van methoden kolom voor ec25 berekening volgens Stuyfzand 
@@ -407,6 +424,7 @@ McNeal<-function(z=dataframeuitMaakKolomMeth){
 #' outputstyle='Stuyfzandstyle',
 #' celcius=25)
 calculate_conductivity<-function(inputfilename="data/metingen.rda",inputstyle='KRWQCinput',outputstyle='KRWQCoutput',celcius=25){
+  
   if(inputstyle=='KRWQCinput'){
     load(inputfilename)
     inputfile=metingen
@@ -481,9 +499,27 @@ calculate_conductivity<-function(inputfilename="data/metingen.rda",inputstyle='K
     LMM_broad_input_dataframe=l
     add_phosphate=FALSE
     add_bicarbonate=FALSE
-    
-    save(LMM_broad_input_dataframe,file = "data/originalinputfile.rds")
-  }  
+  }
+  
+  if(inputstyle=='broadLMM'){
+    # read the original inputfile and save with extra myrownames column
+    LMM_broad_input_dataframe=LoadFileInVariable(inputfilename)
+    add_phosphate=FALSE
+    add_bicarbonate=TRUE
+  }
+  
+  if(inputstyle=='broadLGW'){
+    # read the original inputfile and save with extra myrownames column
+    LMM_broad_input_dataframe=LoadFileInVariable(inputfilename)
+    add_phosphate=TRUE
+    add_bicarbonate=TRUE
+  }
+  
+  inputname=unlist(strsplit(inputfilename,split='.',fixed=T))
+  rdsname=paste0(inputname[1],"_",inputstyle,"_LMM_broad_input_dataframe.rds")
+  
+  saveRDS(LMM_broad_input_dataframe,file=rdsname)
+  
   z=MaakKolomMeth(LMM_broad_input_dataframe=LMM_broad_input_dataframe,celcius=celcius,add_bicarbonate = add_bicarbonate,add_phosphate = add_phosphate)
   z=Blanquet(z)
   z=Logan(z)
@@ -540,34 +576,45 @@ calculate_conductivity<-function(inputfilename="data/metingen.rda",inputstyle='K
   # metveldgemiddelden[myrows,'prinslabel']=k$prinslabel
   # metveldgemiddelden[myrows,'ec25_xecv_sr']=k$ec25_xecv_sr
   with_all_calculated_conductivity=h
-  
+  rdsname=paste0(inputname[1],"_",inputstyle,"_LMM_broad_output_dataframe.rds")
+  saveRDS(with_all_calculated_conductivity,file=rdsname)
+  # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/StuyfzandTable31_Stuyfzand_LMM_broad_output_dataframe.rds")
   if(outputstyle=='Stuyfzandstyle'){
     inputname=unlist(strsplit(inputfilename,split='.',fixed=T))
     newname=paste0(inputname[1],"_",outputstyle,".",inputname[2])
-    rdsname=paste0(inputname[1],"_",outputstyle,"_full.rds")
-    
-    save(with_all_calculated_conductivity,file=rdsname)
-    
     mycols=c("cl mg/l", "hco3 mg/l", "so4 mg/l", "no3 mg/l", "co3 mg/l", 
              "h", "na mg/l", "k mg/l", "ca mg/l", "mg mg/l", "nh4 mg/l", 
-             "myrownames","meth_", "k20", "rk20", 
+             "myrownames","meth_", "ib","k20", "rk20", 
              "ec25", "xecv",  
              "percentage_xecv_ec25")
     
-    with_calculated_conductivity=h[,mycols]
-    # WriteListPointComma(with_calculated_conductivity,filename='with_calculated_conductivity.csv')
-    write.csv(with_calculated_conductivity,file=newname)
+    with_calculated_conductivity=with_all_calculated_conductivity[,mycols]
+    with_calculated_conductivity$percentage_xecv_ec25=round(with_calculated_conductivity$percentage_xecv_ec25,2)
+    with_calculated_conductivity$rk20 =round(with_calculated_conductivity$rk20,2)
+    with_calculated_conductivity$ec25=round(with_calculated_conductivity$ec25,2)
+    with_calculated_conductivity$xecv=round(with_calculated_conductivity$xecv,2)
+    names(with_calculated_conductivity)=c("Cl mg/l", "HCO3 mg/l", "SO4 mg/l", "NO3 mg/l", "CO3 mg/l", 
+                                          "pH", "Na mg/l", "K mg/l", "Ca mg/l", "Mg mg/l", "NH4 mg/l", 
+                                          "myrownames","method","ionbalance", "k20_calc", "rk20_calc", 
+                                          "ec25_calc", "xecv_measured",  
+                                          "percentage_xecv_ec25")
+    
+    
+    WriteListPointComma(with_calculated_conductivity,filename=newname)
     }
   
   
   
   if(outputstyle=='BroadLMMstyle'){
     
-    save(with_all_calculated_conductivity,file='with_all_calculated_conductivity.rda')
-    mycols=c(names(LMM_broad_input_dataframe),'cl','so4','no3','na','k','ca','mg','po4','hco3','xhco3e','percentageverschil_xecv_ec25','ec25','prinslabel','ec25_xecv_sr')
+    inputname=unlist(strsplit(inputfilename,split='.',fixed=T))
+    newname=paste0(inputname[1],"_",outputstyle,".",inputname[2])
+    rdsname=paste0(inputname[1],"_",outputstyle,"_full.rds")
+    
+    save(with_all_calculated_conductivity,file=rdsname)
+    mycols=c(names(LMM_broad_input_dataframe),'cl','so4','no3','na','k','ca','mg','po4','hco3','xhco3e','percentage_xecv_ec25','ec25','prinslabel','ec25_xecv_sr')
     with_calculated_conductivity=h[,mycols]
-    # WriteListPointComma(with_calculated_conductivity,filename='with_calculated_conductivity.csv')
-    save(with_calculated_conductivity,file='with_calculated_conductivity.rda')
+    WriteListPointComma(with_calculated_conductivity,filename=newname)
   }
   
   
@@ -577,6 +624,10 @@ calculate_conductivity<-function(inputfilename="data/metingen.rda",inputstyle='K
 
 
 Stuyfzandtest=calculate_conductivity(inputfilename="data/StuyfzandTable31.csv",inputstyle='Stuyfzand',outputstyle='Stuyfzandstyle',celcius=25)
+
+
+
+
 
 Stuyfzandnamen=c("cl", "hco3", "so4", "no3", "co3", "h", "na", "k", "ca", "mg", 
                  "nh4", "k20")

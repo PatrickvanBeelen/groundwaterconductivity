@@ -238,20 +238,20 @@ setpaperwidth<-function(orientation="landscape") {
   return (a4)
 }
 
+#' loads an RData file use variablename<-LoadFileInVariable(filename) 
 LoadFileInVariable <- function(fileName){
-  #' loads an RData file use variablename<-LoadFileInVariable(filename) 
   load(fileName)
   get(ls()[ls() != "fileName"])
 }
 
+#' Removes empty rows
 RemoveEmptyRows<-function(mydataframe){
-  #' verwijdert lege regels
   cleandataframe=mydataframe[rowSums(is.na(mydataframe))!=ncol(mydataframe),]
   return(cleandataframe)
 }
 
+#' Removes empty columns
 RemoveEmptyColumns<-function(mydataframe){
-  #' verwijdert lege kolommen
   cleandataframe=mydataframe[,colSums(is.na(mydataframe))!=nrow(mydataframe)]
   return(cleandataframe)
 }
@@ -329,11 +329,8 @@ Zie<-function(stringlist,kleinerdanteken="<"){
   return(infolijst)
 }
 
+#' Reads a list from a ; separated data file made by WriteListPointComma or Microsoft Excel
 ReadListPointComma<-function(filename="WriteListPointComma.csv"){
-  #' Leest een lijst uit een ; separated value csv bestand
-  # gemaakt door WriteListPointComma
-  # een oude versie was:
-  # output <- read.csv(file = filename, header = TRUE, sep = ";", quote = "", na.strings = "NA", comment.char = "",,stringsAsFactors=FALSE)
   output<-  try(read.csv(file = filename,
                      header = TRUE, sep = ";", quote = "\"",
                      na.strings = c("NA","NaN"),
@@ -345,10 +342,8 @@ ReadListPointComma<-function(filename="WriteListPointComma.csv"){
   return(output)
 }
 
+#' Writes a list to a ; separated data file easy to read by WriteListPointComma or Microsoft Excel
 WriteListPointComma<-function(inlist,filename="WriteListPointComma.csv"){
-  #' Schrijft een lijst weg als ; separated value
-  # met "om de tekst" door quote=TRUE en 
-  # zonder een 1e kolom voor de rijnamen
   inlist=as.data.frame(inlist)
   write.table(inlist,filename, sep=';',
               fileEncoding="UTF-8",
@@ -357,8 +352,6 @@ WriteListPointComma<-function(inlist,filename="WriteListPointComma.csv"){
               row.names=FALSE,
               dec='.',
               eol="\n")
-  #een oude versie was:
-  #write.table(inlist,filename, sep=';',row.names=TRUE, col.names=NA, quote=TRUE, ,eol="\n")
 }
 
 LeesMetKomma<-function(filename="LeesMetDecimaleKomma.csv"){
