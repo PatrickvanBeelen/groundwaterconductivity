@@ -491,36 +491,36 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
   # uit een logaritmische correlatie van xecv en ec25
   h$prinslabel <- (h$xecv * (1 + h$pxecv) < h$ec25 * (1 - h$pec25)) | (h$xecv * (1 - h$pxecv) > h$ec25 * (1 + h$pec25))
   h$percentage_xecv_ec25 <- 100 * (h$xecv - h$ec25) / h$ec25
-  
-  # 
+
+  #
   ionbalancelm <- lm(log10(h[myrows, "skat"]) ~ log10(h[myrows, "san"]))
   h[myrows, "skat_san_sr"] <- rstandard(ionbalancelm)
-  
+
   # plot(log10(h[myrows, "skat"]),log10(h[myrows, "san"]))
   # abline(coef = c(0,1))
-  
-  hanions=c("cl meq/l","hco3 meq/l","so4 meq/l","no3 meq/l","co3 meq/l","oh")
-  hkations=c("h3o","na meq/l","k meq/l","ca meq/l","mg meq/l","nh4 meq/l","fe","mn")
-  h$max_anion=apply(h[,hanions],1,max)
-  h$max_anion_name=NA
-  for (rownumber in 1:length(h$myrownames)){
-    h[rownumber,"max_anion_name"]=hanions[(h[rownumber,hanions]==h[rownumber,"max_anion"])]
+
+  hanions <- c("cl meq/l", "hco3 meq/l", "so4 meq/l", "no3 meq/l", "co3 meq/l", "oh")
+  hkations <- c("h3o", "na meq/l", "k meq/l", "ca meq/l", "mg meq/l", "nh4 meq/l", "fe", "mn")
+  h$max_anion <- apply(h[, hanions], 1, max)
+  h$max_anion_name <- NA
+  for (rownumber in 1:length(h$myrownames)) {
+    h[rownumber, "max_anion_name"] <- hanions[(h[rownumber, hanions] == h[rownumber, "max_anion"])]
   }
-  
-  h$max_kation=apply(h[,hkations],1,max)
-  h$max_kation_name=NA
-  for (rownumber in 1:length(h$myrownames)){
-    h[rownumber,"max_kation_name"]=hkations[(h[rownumber,hkations]==h[rownumber,"max_kation"])]
+
+  h$max_kation <- apply(h[, hkations], 1, max)
+  h$max_kation_name <- NA
+  for (rownumber in 1:length(h$myrownames)) {
+    h[rownumber, "max_kation_name"] <- hkations[(h[rownumber, hkations] == h[rownumber, "max_kation"])]
   }
-  
-  h$suspect="none"
-  h[h$ec25_xecv_sr>2&h$skat_san_sr>2,'suspect']="max_kation"
-  h[h$ec25_xecv_sr>2&h$skat_san_sr<(-2),'suspect']="max_anion"
+
+  h$suspect <- "none"
+  h[h$ec25_xecv_sr > 2 & h$skat_san_sr > 2, "suspect"] <- "max_kation"
+  h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
   # z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
   # z$skat <- z$h3o + z$na + z$k + z$ca + z$mg + z$nh4 + z$fe + z$mn
-  # 
-  
-  
+  #
+
+
   with_all_calculated_conductivity <- h
   rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rds")
   saveRDS(with_all_calculated_conductivity, file = rdsname)
@@ -533,21 +533,21 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
       "h", "na mg/l", "k mg/l", "ca mg/l", "mg mg/l", "nh4 mg/l",
       "myrownames", "meth_", "ib", "k20", "rk20",
       "ec25", "xecv",
-      "percentage_xecv_ec25","ec25_xecv_sr","skat_san_sr","skat","san",
-      "max_anion","max_anion_name","max_kation","max_kation_name","suspect"
+      "percentage_xecv_ec25", "ec25_xecv_sr", "skat_san_sr", "skat", "san",
+      "max_anion", "max_anion_name", "max_kation", "max_kation_name", "suspect"
     )
 
     with_calculated_conductivity <- with_all_calculated_conductivity[, mycols]
-    with_calculated_conductivity[,c("percentage_xecv_ec25","rk20","ec25","xecv","ib","ec25_xecv_sr","skat_san_sr","skat","san","max_anion","max_kation")]=
-      round(with_calculated_conductivity[,c("percentage_xecv_ec25","rk20","ec25","xecv","ib","ec25_xecv_sr","skat_san_sr","skat","san","max_anion","max_kation")], 2)
+    with_calculated_conductivity[, c("percentage_xecv_ec25", "rk20", "ec25", "xecv", "ib", "ec25_xecv_sr", "skat_san_sr", "skat", "san", "max_anion", "max_kation")] <-
+      round(with_calculated_conductivity[, c("percentage_xecv_ec25", "rk20", "ec25", "xecv", "ib", "ec25_xecv_sr", "skat_san_sr", "skat", "san", "max_anion", "max_kation")], 2)
 
     names(with_calculated_conductivity) <- c(
       "Cl mg/l", "HCO3 mg/l", "SO4 mg/l", "NO3 mg/l", "CO3 mg/l",
       "pH", "Na mg/l", "K mg/l", "Ca mg/l", "Mg mg/l", "NH4 mg/l",
       "myrownames", "method", "ionbalance", "k20_calc", "rk20_calc",
       "ec25_calc", "xecv_measured",
-      "percentage_xecv_ec25","ec25_xecv_sr","skat_san_sr","kations meq/l","anions meq/l",
-      "max_anion meq/l","max_anion_name","max_kation meq/l","max_kation_name","suspect"
+      "percentage_xecv_ec25", "ec25_xecv_sr", "skat_san_sr", "kations meq/l", "anions meq/l",
+      "max_anion meq/l", "max_anion_name", "max_kation meq/l", "max_kation_name", "suspect"
     )
 
 
@@ -573,4 +573,4 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
 
 
 
-Stuyfzandtest <- calculate_conductivity(inputfilename = "data/StuyfzandTable31.csv", inputstyle = "Stuyfzand", outputstyle = "Stuyfzandstyle", celcius = 25)
+# Stuyfzandtest <- calculate_conductivity(inputfilename = "data/StuyfzandTable31.csv", inputstyle = "Stuyfzand", outputstyle = "Stuyfzandstyle", celcius = 25)
