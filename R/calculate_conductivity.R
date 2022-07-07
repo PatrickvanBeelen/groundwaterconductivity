@@ -485,12 +485,40 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
   myrows[is.na(myrows)] <- FALSE
   mlm <- lm(log10(h[myrows, "ec25"]) ~ log10(h[myrows, "xecv"]))
   h[myrows, "ec25_xecv_sr"] <- rstandard(mlm)
-  # deze formule  komt van Herman Prins en klopt vrij nauwkeurig  drie standaardresiduen
-  # uit een logaritmische correlatie van xecv en ec25
   h[myrows, "pxecv"] <- 2^-log10(h[myrows, "xecv"])
   h[myrows, "pec25"] <- 2^-log10(h[myrows, "ec25"])
+  # deze formule  komt van Herman Prins en klopt vrij nauwkeurig  drie standaardresiduen
+  # uit een logaritmische correlatie van xecv en ec25
   h$prinslabel <- (h$xecv * (1 + h$pxecv) < h$ec25 * (1 - h$pec25)) | (h$xecv * (1 - h$pxecv) > h$ec25 * (1 + h$pec25))
   h$percentage_xecv_ec25 <- 100 * (h$xecv - h$ec25) / h$ec25
+  
+  # 
+  ionbalancelm <- lm(log10(h[myrows, "skat"]) ~ log10(h[myrows, "san"]))
+  h[myrows, "skat_san_sr"] <- rstandard(ionbalancelm)
+  
+  # plot(log10(h[myrows, "skat"]),log10(h[myrows, "san"]))
+  # abline(coef = c(0,1))
+  
+  hanions=c("cl meq/l","hco3 meq/l","so4 meq/l","no3 meq/l","co3 meq/l","oh")
+  hkations=c("h3o","na meq/l","k meq/l","ca meq/l","mg meq/l","nh4 meq/l","fe","mn")
+  h$max_anion=apply(h[,hanions],1,max)
+  h$max_anion_name=NA
+  for (rownumber in 1:length(h$myrownames)){
+    h[rownumber,"max_anion_name"]=hanions[(h[rownumber,hanions]==h[rownumber,"max_anion"])]
+  }
+  
+  h$max_kation=apply(h[,hkations],1,max)
+  h$max_kation_name=NA
+  for (rownumber in 1:length(h$myrownames)){
+    h[rownumber,"max_kation_name"]=hkations[(h[rownumber,hkations]==h[rownumber,"max_kation"])]
+  }
+  
+  
+  # z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
+  # z$skat <- z$h3o + z$na + z$k + z$ca + z$mg + z$nh4 + z$fe + z$mn
+  # 
+  
+  
   with_all_calculated_conductivity <- h
   rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rds")
   saveRDS(with_all_calculated_conductivity, file = rdsname)
