@@ -1,12 +1,3 @@
-rm(list = ls())
-graphics.off()
-close.screen(all.screens = TRUE) # Inladen pakketten
-
-library(tidyverse)
-# save data in mytempdir
-mytempdir <- tempdir()
-
-
 NA2zero <- function(x) {
   x[is.na(x)] <- 0
   x[is.nan(x)] <- 0
@@ -570,7 +561,3 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
 
   return(with_calculated_conductivity)
 }
-
-
-
-# Stuyfzandtest <- calculate_conductivity(inputfilename = "data/StuyfzandTable31.csv", inputstyle = "Stuyfzand", outputstyle = "Stuyfzandstyle", celcius = 25)
