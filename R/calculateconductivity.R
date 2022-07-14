@@ -351,7 +351,7 @@ McNeal <- function(z = dataframeuitMaakKolomMeth) {
 #' Aluminum is used in microgram/liter and the pH is used as such.
 #' The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 #' Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
-#' @example
+#' @examples
 #' Stuyfzandtest<-calculate_conductivity(inputfilename="data/StuyfzandTable31.csv",
 #'  inputstyle='Stuyfzand',
 #' outputstyle='Stuyfzandstyle',

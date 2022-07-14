@@ -5,9 +5,9 @@
 \title{Calculate the conductivity of groundwater from its ionic composition}
 \usage{
 calculate_conductivity(
-  inputfilename = "data/metingen.rda",
-  inputstyle = "KRWQCinput",
-  outputstyle = "KRWQCoutput",
+  inputfilename = "data/StuyfzandTable31.csv",
+  inputstyle = "Stuyfzand",
+  outputstyle = "Stuyfzandstyle",
   celcius = 25
 )
 }
@@ -18,4 +18,10 @@ The calculations can use calcium, chloride, Iran, potassium, magnesium, manganes
 Aluminum is used in microgram/liter and the pH is used as such.
 The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
+}
+\examples{
+Stuyfzandtest<-calculate_conductivity(inputfilename="data/StuyfzandTable31.csv",
+ inputstyle='Stuyfzand',
+outputstyle='Stuyfzandstyle',
+celcius=25)
 }
