@@ -1,4 +1,4 @@
 library(testthat)
-library(conductivity)
+library(groundwaterconductivity)
 
-test_check("conductivity")
+test_check("test-groundwaterconductivity")

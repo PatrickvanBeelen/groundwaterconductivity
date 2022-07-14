@@ -346,17 +346,12 @@ McNeal <- function(z = dataframeuitMaakKolomMeth) {
 #' Calculate the conductivity of groundwater from its ionic composition
 #' @description
 #' you will need a data frame with the concentrations of a number of ions
-#' as shown in data/StuijzandTable31.csv
+#' as shown in data/Table.csv
 #' The calculations can use calcium, chloride, Iran, potassium, magnesium, manganese, sodium, ammonium, nitrate, phosphate, zinc, #' bicarbonate, carbonate in milligrams/liter.
 #' Aluminum is used in microgram/liter and the pH is used as such.
 #' The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 #' Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
-#' @examples
-#' Stuyfzandtest<-calculate_conductivity(inputfilename="data/StuyfzandTable31.csv",
-#'  inputstyle='Stuyfzand',
-#' outputstyle='Stuyfzandstyle',
-#' celcius=25)
-calculate_conductivity <- function(inputfilename="data/StuyfzandTable31.csv",
+calculate_conductivity <- function(inputfilename="data/Table.csv",
                                    inputstyle = "Stuyfzand",
                                    outputstyle = "Stuyfzandstyle", celcius = 25) {
   if (inputstyle == "KRWQCinput") {
@@ -518,7 +513,7 @@ calculate_conductivity <- function(inputfilename="data/StuyfzandTable31.csv",
   with_all_calculated_conductivity <- h
   rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rds")
   saveRDS(with_all_calculated_conductivity, file = rdsname)
-  # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/StuyfzandTable31_Stuyfzand_LMM_broad_output_dataframe.rds")
+  # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
   if (outputstyle == "Stuyfzandstyle") {
     inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
     newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
