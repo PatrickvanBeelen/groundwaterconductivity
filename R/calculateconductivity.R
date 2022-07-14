@@ -356,7 +356,9 @@ McNeal <- function(z = dataframeuitMaakKolomMeth) {
 #'  inputstyle='Stuyfzand',
 #' outputstyle='Stuyfzandstyle',
 #' celcius=25)
-calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputstyle = "KRWQCinput", outputstyle = "KRWQCoutput", celcius = 25) {
+calculate_conductivity <- function(inputfilename="data/StuyfzandTable31.csv",
+                                   inputstyle = "Stuyfzand",
+                                   outputstyle = "Stuyfzandstyle", celcius = 25) {
   if (inputstyle == "KRWQCinput") {
     load(inputfilename)
     inputfile <- metingen
@@ -462,8 +464,9 @@ calculate_conductivity <- function(inputfilename = "data/metingen.rda", inputsty
   z <- Dunlap(z)
   z <- McNeal(z)
   z <- Rossum(z)
-
-  h <- left_join(s, z, by = "myrownames", suffix = c(" mg/l", " meq/l"))
+  
+  h<-merge(x=s,y=z,by="myrownames",all.x=TRUE,suffixes=c(" mg/l", " meq/l"))
+  # hx <- dplyr::left_join(s, z, by = "myrownames", suffix = c(" mg/l", " meq/l"))
   # omrekenen naar 25 celcius en mS/m ipv uS/cm
   # temperatuur formule uit SWE 87-006
   h$ec25 <- 0.10 * h$rk20 / (1 - 0.023 * 5)
