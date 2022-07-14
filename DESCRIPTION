@@ -14,14 +14,7 @@ Description: It calculates the electric conductivity of water at 25°C from the 
     The method was compared with a well-known publication of 
     McCleskey, R. B., et al. (2012). "A new method of calculating electrical conductivity with applications to natural waters." Geochimica et cosmochimica acta 77: 369-382.
     The Dutch report gave accurate results over a much wider range of different groundwater types.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0)
-VignetteBuilder: knitr
-Config/testthat/edition: 3
