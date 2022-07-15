@@ -26,3 +26,6 @@
   },
   "homepage": "https://github.com/PatrickvanBeelen/groundwaterconductivity#readme"
 }
+"publishConfig": {
+   "@PatrickvanBeelen:registry": "https://npm.pkg.github.com"
+ }
