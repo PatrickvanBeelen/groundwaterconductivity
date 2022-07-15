@@ -1,0 +1,28 @@
+{
+  "name": "@patrickvanbeelen/groundwaterconductivity",
+  "version": "1.0.0",
+  "description": "calculate the conductivity of groundwater",
+  "main": "console.log(\"HelloWorld\")",
+  "directories": {
+    "man": "man",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "console.log(\"HelloWorld\")"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickvanBeelen/groundwaterconductivity.git"
+  },
+  "keywords": [
+    "groundwater",
+    "chemistry",
+    "conductivity"
+  ],
+  "author": "Patrick van Beelen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PatrickvanBeelen/groundwaterconductivity/issues"
+  },
+  "homepage": "https://github.com/PatrickvanBeelen/groundwaterconductivity#readme"
+}
