@@ -1,0 +1,140 @@
+---
+title: "groundwaterconductivity"
+author: "Patrick van Beelen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{groundwaterconductivity}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(groundwaterconductivity)
+```
+
+## Introduction
+
+Whereas the README.Rds file gives you information about what you can do with the groundwaterconductivity package. This manual will show you how to do it. The method is described in a Dutch report by Stuyfzand, P. (1987). Een zeer nauwkeurige berekening van het elektrisch geleidingsvermogen, ter controle en aanvulling van wateranalyses: 2e versie. Rijswijk, KIWA. Table 3.1 of this report is used to test the calculations. The table is shown in data/Table.csv 
+
+## Data input
+
+The groundwater conductivity calculations require proper names and dimensions of the parameters needed to calculate the conductivity. Table 1 presents the name, content and dimension of the parameters needed. The first rows from rownumber to Calculated conductivity are also present in Table 3.1 of the Stuyfzand report and  are used for the quality test of the calculations. Stuyfzand did not use aluminum, iron, phosphate, manganese and zinc to validate his method. The Dutch Minerals Monitoring Policy Program is using the groundwater conductivity calculations presented here for decades. This program is abbreviated to LMM in Dutch and has its own parameter names and dimensions. In most cases milligrams/liter is used except for a few differences in column LMM dimension.
+
+Table 1 measured parameters (`Table`):
+
++------------+-------------------------+------------+------------+------------+
+| name       | content                 | dimension  | LMM        | LMM        |
+|            |                         |            |            |            |
+|            |                         |            | name       | dimension  |
++:===========+:========================+:===========+============+============+
+| no         | rownumber               |            | myrownames |            |
++------------+-------------------------+------------+------------+------------+
+| cl         | Choride                 | mg/L       | xcl        |            |
++------------+-------------------------+------------+------------+------------+
+| hco3       | Bicarbonate             | mg/L       | xhco3      |            |
++------------+-------------------------+------------+------------+------------+
+| so4        | Sulfate                 | mg/L       | xso4       |            |
++------------+-------------------------+------------+------------+------------+
+| no3        | Nitrate                 | mg/L       | xno3       |            |
++------------+-------------------------+------------+------------+------------+
+| co3        | Carbonate               | mg/L       | xco3       |            |
++------------+-------------------------+------------+------------+------------+
+| h          | pH                      | mg/L       | xhv        |            |
++------------+-------------------------+------------+------------+------------+
+| na         | Sodium                  | mg/L       | xna        |            |
++------------+-------------------------+------------+------------+------------+
+| k          | Potassium               | mg/L       | xk         |            |
++------------+-------------------------+------------+------------+------------+
+| ca         | Calcium                 | mg/L       | ca         |            |
++------------+-------------------------+------------+------------+------------+
+| mg         | Magnesium               | mg/L       | xmg        |            |
++------------+-------------------------+------------+------------+------------+
+| nh4        | Ammonium                | mg/L       | xnh4       |            |
++------------+-------------------------+------------+------------+------------+
+| k20meas    | Measured conductivity   | µS/cm      | xecv       | mS/m       |
++------------+-------------------------+------------+------------+------------+
+| k20        | Calculated conductivity | µS/cm      | ec25       | mS/m       |
++------------+-------------------------+------------+------------+------------+
+| al         | Aluminum                | mg/l       | xal        | µg/L       |
++------------+-------------------------+------------+------------+------------+
+| fe         | Iron                    | mg/L       | xfe        |            |
++------------+-------------------------+------------+------------+------------+
+| po4        | Phosphate               | mg/L       | xpo4       | mg P/L     |
++------------+-------------------------+------------+------------+------------+
+| mn         | Manganese               | mg/L       | xmn        |            |
++------------+-------------------------+------------+------------+------------+
+| zn         | Zinc                    | mg/L       | xzn        |  µg/L      |
++------------+-------------------------+------------+------------+------------+
+
+### Overzicht van de data
+
+Dit pakket maakt gebruik van test data van het LMG die op bepaalde punten is aangepast om het gedrag van verschillende functies te controleren. Voorbeeld bestanden inladen:
+
+```{r}
+data(veld)
+data(put)
+data(metingen)
+data(filter)
+```
+
+Overzicht tabel 1 met veldgegevens
+
+```{r}
+#str(veld)
+#head(veld)
+```
+
+Overzicht tabel 2 met put informatie
+
+```{r}
+#str(put)
+#head(put)
+```
+
+Overzicht tabel 3 met putfilter informatie
+
+```{r}
+#str(filter)
+#head(filter)
+```
+
+## Installatie KRWQCprotocol R-pakket
+
+Het KRWQCprotocol wordt beschikbaar gesteld als R pakket. Gebruikers kunnen de functies uit dit pakket gebruiken in hun eigen scripts. Om het pakket te installeren moet vanuit R het volgende commando uitgevoerd worden:
+
+```{r eval=FALSE}
+#remotes::install_github("jspijker/KRWQCprotocol")
+```
+
+## Werking KRWQCprotocol R-pakket
+
+De verschillende QC stappen uit het Protocol kunnen eenvoudig uitgevoerd worden door het aanroepen van de relevante functie (QC0a-QC5). Als invoer van de functie worden de relevante datatabellen meegegeven benodigd voor de testen. In de functie kan met het verbose argument opgegeven worden of de print van tussentijdse output gewenst is door deze op `TRUE` te zetten. In een aantal gevallen dienen extra invoervariabelen opgegeven te worden. Zie hiervoor de documentatie bij de functies, bijvoorbeeld `?KRWQCprotocol::QC0a`.
+
+In de verschillende QC functies worden de testen uitgevoerd beschreven in het QC Protocol. Als bij deze stappen een afwijking geconstateerd wordt dan krijgt het monster, de parameter of de waarde een concept oordeel toegekend. Deze afwijkingen worden aan het eind van de functie als attribuut meegegeven aan het metingen bestand (`d_metingen`) en kunnen dus na het runnen van elke test bekeken worden.
+
+*BELANGRIJK:* alle resultaten en concept oordelen worden per QC-test als attribuut aan het metingenbestand gehangen. Het is daarom noodzakelijk om voor elke test hetzelfde bestand als invoer te gebruiken, zodat alle test resultaten uiteindelijk als attribuut beschikbaar zijn onder eenzelfde bestand.
+
+## Toepassing functies
+
+Hieronder zullen de QC stappen 0-5 kort doorlopen worden om te laten zien hoe de functies toegepast worden en of aanvullende acties benodigd zijn.
+
+Bij een viertal QC stappen moet de validatie door de grondwaterbeheerder zelf worden uitgevoerd. Het gaat om de stappen QC0c, QC0d, QC2b en QC2c. Om deze stappen in het R-pakket op te kunnen nemen moet voor deze functies eerst een invoerbestand gegenereerd worden met `QC0c_create_file`, idem voor de overige 3 functies. Na het invullen van deze bestanden dient het bestand onder dezelfde naam opgeslagen te worden zodat deze meegenomen kan worden in de functies QC0c, QC0d, QC2b en QC2c uit dit pakket. De resultaten worden net als bij de andere functies vervolgens als attribute toegekend aan het metingen bestand.
+
+### QC0 - Meetopstelling
+
+De stappen en functies onder QC0 worden op reguliere wijze uitgevoerd door het aanroepen van de betreffende functie en benodigde datasets, met uitzondering van QC0c en QC0d zie bovenstaande.
