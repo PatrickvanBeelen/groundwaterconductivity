@@ -54,5 +54,4 @@ data/
 groundwaterconductivity.Rproj
 .Rbuildignore
 test/
-vignettes/
 man/
