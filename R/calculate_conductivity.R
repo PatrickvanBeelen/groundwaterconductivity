@@ -77,7 +77,7 @@ calculate_conductivity <- function(inputfilename="data/Table.csv",
   z <- McNeal(z)
   z <- Rossum(z)
   
-  h<-merge(x=s,y=z,by="myrownames",all.x=TRUE,suffixes=c(" mg/l", " meq/l"))
+  h<-merge(x=LMM_broad_input_dataframe,y=z,by="myrownames",all.x=TRUE,suffixes=c(" mg/l", " meq/l"))
   # hx <- dplyr::left_join(s, z, by = "myrownames", suffix = c(" mg/l", " meq/l"))
   # omrekenen naar 25 celcius en mS/m ipv uS/cm
   # temperatuur formule uit SWE 87-006
@@ -105,8 +105,11 @@ calculate_conductivity <- function(inputfilename="data/Table.csv",
   # plot(log10(h[myrows, "skat"]),log10(h[myrows, "san"]))
   # abline(coef = c(0,1))
   
-  hanions <- c("cl meq/l", "hco3 meq/l", "so4 meq/l", "no3 meq/l", "co3 meq/l", "oh")
-  hkations <- c("h3o", "na meq/l", "k meq/l", "ca meq/l", "mg meq/l", "nh4 meq/l", "fe", "mn")
+  # hanions <- c("cl meq/l", "hco3 meq/l", "so4 meq/l", "no3 meq/l", "co3 meq/l", "oh")
+  # hkations <- c("h3o", "na meq/l", "k meq/l", "ca meq/l", "mg meq/l", "nh4 meq/l", "fe", "mn")
+  hanions <- c("cl", "hco3", "so4", "no3", "co3", "oh")
+  hkations <- c("h3o", "na", "k", "ca", "mg", "nh4", "fe", "mn")
+  
   h$max_anion <- apply(h[, hanions], 1, max)
   h$max_anion_name <- NA
   for (rownumber in 1:length(h$myrownames)) {
@@ -118,10 +121,14 @@ calculate_conductivity <- function(inputfilename="data/Table.csv",
   for (rownumber in 1:length(h$myrownames)) {
     h[rownumber, "max_kation_name"] <- hkations[(h[rownumber, hkations] == h[rownumber, "max_kation"])]
   }
-  
   h$suspect <- "none"
-  h[h$ec25_xecv_sr > 2 & h$skat_san_sr > 2, "suspect"] <- "max_kation"
-  h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
+  # When the calculated conductivity is much higher than the measured one and the ion balance has an excess of kations, 
+  # then the kation with the maximum concentration of milliequivalents is suspect.
+    h[h$ec25_xecv_sr > 2 & h$skat_san_sr > 2, "suspect"] <- "max_kation"
+
+  # When the calculated conductivity is much higher than the measured one and the ion balance has an excess of anions, 
+  # then the anion with the maximum concentration of milliequivalents is suspect.
+    h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
   # z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
   # z$skat <- z$h3o + z$na + z$k + z$ca + z$mg + z$nh4 + z$fe + z$mn
   #
@@ -131,6 +138,8 @@ calculate_conductivity <- function(inputfilename="data/Table.csv",
   rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rds")
   saveRDS(with_all_calculated_conductivity, file = rdsname)
   # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
+  
+  
   if (outputstyle == "Stuyfzandstyle") {
     inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
     newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
@@ -160,6 +169,33 @@ calculate_conductivity <- function(inputfilename="data/Table.csv",
     WriteListPointComma(with_calculated_conductivity, filename = newname)
   }
   
+  if (outputstyle == "minimal") {
+    mycols=c("myrownames", "no", "cl mg/l", "hco3 mg/l", "so4 mg/l", "no3 mg/l", 
+      "co3 mg/l", "h", "na mg/l", "k mg/l", "ca mg/l", "mg mg/l", "nh4 mg/l", 
+      "k20meas", "k20", "orderK20", "hco3 meq/l", "cl meq/l", "so4 meq/l", 
+      "no3 meq/l", "co3 meq/l", "h3o", "na meq/l", "k meq/l", "ca meq/l", 
+      "mg meq/l", "nh4 meq/l", "fe", "mn", "al", "zn", "po4", "pos", 
+      "neg", "ib", "oh", "mu", "sqmu", "gam2", "san", "skat", "alM", 
+      "so4M", "DO", "tmp", "also4", "alF", "aloh", "aloh2", "alZ", 
+      "san2", "skat2", "sgem", "rcl", "rhco3", "rso4", "rno3", "meth", 
+      "meth_", "rk20", "ec25", "xecv", "ec25_xecv_sr", "pxecv", "pec25", 
+      "prinslabel", "percentage_xecv_ec25", "skat_san_sr", "max_anion", 
+      "max_anion_name", "max_kation", "max_kation_name", "suspect")
+    mycols=c("myrownames", "no", "hco3 meq/l", "cl meq/l", "so4 meq/l", 
+             "no3 meq/l", "co3 meq/l", "h3o", "na meq/l", "k meq/l", "ca meq/l", 
+             "mg meq/l", "nh4 meq/l", "fe", "mn", "al", "zn", "po4", "pos", 
+             "neg", "ib", "oh","san2", "skat2", 
+             "meth_", "ec25", "xecv", "ec25_xecv_sr","skat_san_sr", "max_anion", 
+             "max_anion_name", "max_kation", "max_kation_name", "suspect")
+    mydatacols=c("hco3 meq/l", "cl meq/l", "so4 meq/l", 
+                 "no3 meq/l", "co3 meq/l", "h3o", "na meq/l", "k meq/l", "ca meq/l", 
+                 "mg meq/l", "nh4 meq/l", "fe", "mn", "al", "zn", "po4", "pos", 
+                 "neg", "ib", "oh","san2", "skat2", 
+                 "ec25", "xecv", "ec25_xecv_sr", "skat_san_sr", "max_anion", 
+                 "max_kation")
+    a=h[,mycols]
+    a[,mydatacols]=round(a[,mydatacols],2)
+  }
   
   
   if (outputstyle == "BroadLMMstyle") {
