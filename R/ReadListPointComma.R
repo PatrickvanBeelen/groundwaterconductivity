@@ -1,10 +1,10 @@
-#' Reads a list from a ; separated data file 
+#' Reads a list from a ; separated data file
 #' made by WriteListPointComma or Microsoft Excel
 #' @param output The output dataframe from the file "data/Table.csv"
 #' @importFrom utils read.csv
 #' @export
-#' @examples 
-#' Table<-ReadListPointComma(filename="data/Table.csv")
+#' @examples
+#' Table <- ReadListPointComma(filename = "data/Table.csv")
 ReadListPointComma <- function(filename = "WriteListPointComma.csv") {
   output <- try(read.csv(
     file = filename,

@@ -252,7 +252,7 @@ Table 2 Output headings
 +----------------------+------------+---------------------------------------------------------------------------------+
 | suspect              |            | none or max_anion or max_kation                                                 |
 +----------------------+------------+---------------------------------------------------------------------------------+
-|                      |            |                                                                                 |
+| percentage           |            | difference between script Stuyfzand and this script in %                        |
 +----------------------+------------+---------------------------------------------------------------------------------+
 |                      |            |                                                                                 |
 +----------------------+------------+---------------------------------------------------------------------------------+
@@ -263,7 +263,7 @@ The data generally have a logarithmically transformed normal distribution. The h
 
 ## Output style Stuyfzand
 
-gedrag van verschillende functies te controleren. Voorbeeld bestanden inladen:
+The output style Stuyfzand is a specialized output style to compare the results of the calculated conductivity k20 from the report of Stuyfzand with the calculated conductivity rk20 in this groundwaterconductivity::calculate_conductivity.R script. Both are expressed in micro Siemens/centimeter at 20°C. The percentage column is calculated as 100\*(rk20-k20)/k20 and rounded to zero digits. In the file Stuyfzand_minimal_output.csv the comparison between the report of Stuyfzand and our script is shown. Generally the difference is very small except for row 3, row 5 and row 7 all using the first method of Rossum and having very low conductivities . The five other rows using this method gave much more accurate results.
 
 ## Output style minimal
 

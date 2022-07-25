@@ -16,7 +16,7 @@ Rossum <- function(z = dataframeuitMaakKolomMeth) {
   b[b$rcl >= 0.67 & !is.na(b$rcl), "KROSS"] <- 1.0003 * b[b$rcl >= 0.67 & !is.na(b$rcl), "kross"] - 2
   b[b$rso4 >= 0.33 & !is.na(b$rso4), "KROSS"] <- 0.989 * b[b$rso4 >= 0.33 & !is.na(b$rso4), "kross"]
   b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "KROSS"] <- 1.025 * b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "kross"] - 8
-  
+
   z[z$meth == "rossum", "rk20"] <- b$KROSS
   rk20uitRossumIndataframeuitMaakKolomMeth <- z
   return(rk20uitRossumIndataframeuitMaakKolomMeth)

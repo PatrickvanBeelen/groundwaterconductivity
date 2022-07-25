@@ -1,12 +1,12 @@
 #' Prepare for the conductivity calculations by selecting the proper method
 MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe, celcius = celcius, add_bicarbonate = add_bicarbonate, add_phosphate = add_phosphate) {
   #   matrixnamen=c('xal',"xca","xcl","xfe","xhv","xk","xmg","xmn","xna","xnh4","xno3",'xpo4',"xso4",'xecv','xzn','xhco3','xco3')
-  
+
   zm <- as.data.frame(LMM_broad_input_dataframe)
   if (!"xhv" %in% colnames(zm)) {
     zm$xhv <- NA
   }
-  
+
   if (!"xhco3" %in% colnames(zm)) {
     zm$xhco3 <- NA
   }
@@ -16,14 +16,14 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
   if (!"xhco3v" %in% colnames(zm)) {
     zm$xhco3v <- NA
   }
-  
+
   if (!"xpo4" %in% colnames(zm)) {
     zm$xpo4 <- NA
   }
   # in xhco3 stoppen we het gemiddelde van xhco3 en xhco3v
   # met de NAs niet meegenomen dus meer kans op een meetwaarde
   # alle NAs op nul zetten behalve pH en xhco3v
-  
+
   zm[is.na(zm$xhco3) & !is.na(zm$xhco3v), "xhco3e"] <- zm[is.na(zm$xhco3) & !is.na(zm$xhco3v), "xhco3v"]
   zm[!is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3e"] <- zm[!is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3"]
   zm[is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3e"] <- 0
@@ -72,18 +72,18 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
   # al is in microgram
   z$al <- 0.003 * zm$xal / 26.98
   z$zn <- 0.002 * zm$xzn / 65.39
-  
+
   z$po4 <- 3 * zm$xpo4 / 30.97
   # z bevat geen NAs in plaats daarvan nullen
-  
+
   # nu staan er nog nullen in z$po4
   if (add_phosphate) {
     # als z$po4=0 dan gebruiken we zm$xptot
     z[z$po4 == 0, "po4"] <- 3 * zm[zm$xpo4 == 0, "xptot"] / 30.97
   }
-  
+
   # alles omgezet van zm naar z behalve xecv
-  
+
   #  ionbalans
   z$pos <- z$al + z$ca + 0.6 * z$fe + z$k + z$mg + z$mn + z$nh4 + z$na + z$zn + z$h3o
   z$neg <- z$cl + z$hco3 + z$no3 + z$so4 + z$co3 + z$po4
@@ -93,7 +93,7 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
   #  maar xecv wordt omgerekend naar 25 graden celcius
   TK <- 273.15 + celcius
   z$oh <- (1000 * 10^(6.0875 - 0.01706 * TK - 4470.99 / TK)) / z$h3o
-  
+
   # als er geen xhco3 is dan schatten we hco3 uit de ionbalans
   if (add_bicarbonate) {
     z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
@@ -200,7 +200,7 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
   myrows[is.na(myrows)] <- FALSE
   z[myrows, "meth_"] <- "leeg"
   z[myrows, "meth"] <- "leeg"
-  
+
   z$rk20 <- as.numeric(0)
   dataframeuitMaakKolomMeth <- z
   return(dataframeuitMaakKolomMeth)
