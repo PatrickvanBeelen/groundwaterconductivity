@@ -15,5 +15,5 @@ Reads a list from a ; separated data file
 made by WriteListPointComma or Microsoft Excel
 }
 \examples{
-Table<-ReadListPointComma(filename="data/Table.csv")
+Table <- ReadListPointComma(filename = "data/Table.csv")
 }

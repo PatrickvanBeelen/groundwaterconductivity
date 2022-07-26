@@ -30,5 +30,5 @@ The calculations can use calcium, chloride, Iran, potassium, magnesium, manganes
 Aluminum is used in microgram/liter and the pH is used as such.
 The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
-myoutputdataframe<-calculate_conductivity(inputfilename="data/Table.csv",inputstyle = "Stuyfzand",outputstyle = "Stuyfzandstyle", celcius = 25)
+myoutputdataframe<-calculate_conductivity(inputfilename="data/Table.csv",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
 }
