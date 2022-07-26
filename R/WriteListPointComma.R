@@ -4,7 +4,6 @@
 #' @param Table The input dataframe or list Table
 #' @param filename The name of the data/Table.csv
 #' @importFrom  utils write.table
-#' @export
 WriteListPointComma <- function(Table, filename = "data/WriteListPointComma.csv") {
   Table <- as.data.frame(Table)
   write.table(Table, filename,

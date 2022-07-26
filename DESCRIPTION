@@ -1,23 +1,32 @@
 Package: groundwaterconductivity
-Title: Calculates the electrical conductivity of water, from the measured cations and anions and compares that with the measured conductivity
+Title: Calculates the electrical conductivity of water, from the measured
+    cations and anions and compares that with the measured conductivity
 Version: 0.0.0.9000
 Authors@R: 
     person("Patrick", "van Beelen", , "patrick.van.beelen@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5835-3787"))
-Description: It calculates the electric conductivity of water at 25°C from the ionic composition of the water. 
-    The comparison of the calculated and the measured electric conductivity is useful for quality control of groundwater and surface water monitoring programs. 
-    The user must make an input file with the proper names and dimensions of the measured cations and anions. 
-    The script reads the input file and produces an output file with the calculated conductivity using the formulas described by a Dutch report by 
-    Stuyfzand, P. (1987). Een zeer nauwkeurige berekening van het elektrischgeleidingsvermogen, ter controle en aanvulling van wateranalyses: 2e versie. Rijswijk, KIWA. 
-    This report selects an optimal calculation method for each individual set of measured ions. 
-    It allows an accurate calculation of the conductivity for a wide range of different groundwater types. 
-    The method was compared with a well-known publication of 
-    McCleskey, R. B., et al. (2012). "A new method of calculating electrical conductivity with applications to natural waters." Geochimica et cosmochimica acta 77: 369-382.
-    The Dutch report gave accurate results over a much wider range of different groundwater types.
+Description: It calculates the electric conductivity of water at 25°C from
+    the ionic composition of the water.  The comparison of the calculated
+    and the measured electric conductivity is useful for quality control
+    of groundwater and surface water monitoring programs.  The user must
+    make an input file with the proper names and dimensions of the
+    measured cations and anions.  The script reads the input file and
+    produces an output file with the calculated conductivity using the
+    formulas described by a Dutch report by Stuyfzand, P. (1987). Een zeer
+    nauwkeurige berekening van het elektrischgeleidingsvermogen, ter
+    controle en aanvulling van wateranalyses: 2e versie. Rijswijk, KIWA.
+    This report selects an optimal calculation method for each individual
+    set of measured ions.  It allows an accurate calculation of the
+    conductivity for a wide range of different groundwater types.  The
+    method was compared with a well-known publication of McCleskey, R. B.,
+    et al. (2012). "A new method of calculating electrical conductivity
+    with applications to natural waters." Geochimica et cosmochimica acta
+    77: 369-382.  The Dutch report gave accurate results over a much wider
+    range of different groundwater types.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
