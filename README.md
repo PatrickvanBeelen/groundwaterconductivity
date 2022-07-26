@@ -144,4 +144,5 @@ the ion balance is off it becomes more probable that there is a mistake
 in the measurement of cations or anions. In addition one can look at
 previous measurements at the same location which can also give a clue on
 which parameter is causing the discrepancy between the calculated and
-the measured conductivity.
+the measured conductivity. 
+The vignette vignettes/groundwaterconductivity.Rmd gives more details.
