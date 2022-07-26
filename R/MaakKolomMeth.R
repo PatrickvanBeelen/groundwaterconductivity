@@ -94,7 +94,11 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
   TK <- 273.15 + celcius
   z$oh <- (1000 * 10^(6.0875 - 0.01706 * TK - 4470.99 / TK)) / z$h3o
 
-  # als er geen xhco3 is dan schatten we hco3 uit de ionbalans
+  # The bicarbonate anion is in equilibrium with CO2 gas from the air. It therefore can escape from sampling through the air. 
+  # At the LMM monitoring network we have chosen not to sample bicarbonate. 
+  # In that case the bicarbonate concentration can only be roughly estimated from the ion balance when one assumes that there are equal charge equivalents from cations and anions. 
+  # In that case the amount of milliequivalents of bicarbonate is equal to the sum of the cations minus the sum of the anions. 
+  # This can only be performed when there is an excess of cations.
   if (add_bicarbonate) {
     z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
     z$skat <- z$h3o + z$na + z$k + z$ca + z$mg + z$nh4 + z$fe + z$mn

@@ -68,6 +68,11 @@ This was manually calculated from the k20 measured correcting for the
 5°C temperature difference.
 
 ## Output
+If you have installed the package library(groundwaterconductivity) will load the functions. If you run:
+
+myoutputdataframe<-calculate_conductivity(inputfilename="data/Table.csv",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
+
+The calculations will be performed. You can replace data/Table.csv with your own data. 
 
 The file StuyfzandTable31_Stuyfzand_LMM_broad_output_dataframe.rds
 generates the complete output of the calculations. Most users appreciate
