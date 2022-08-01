@@ -364,7 +364,7 @@ calculate_conductivity <- function(inputfilename="data/input_dataframe.rda",
                                    outputstyle = "Stuyfzandstyle",
                                    celcius = 25) {
   if (inputstyle == "Stuyfzand") {
-    read the original inputfile and save with extra myrownames column
+    # read the original inputfile and save with extra myrownames column
     if (file.exists(inputfilename)){
       load(inputfilename)
           }else{
