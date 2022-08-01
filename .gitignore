@@ -14,7 +14,6 @@
 .png
 # R data files
 *.rds
-*.rda
 *.Rd
 # Example code in package build process
 *-Ex.R
@@ -46,11 +45,9 @@ tmp/
 doc
 Meta
 docs
-data/
 *.csv
 *.xlsx
 *.pdf
-*.rda
 groundwaterconductivity.Rproj
 .Rbuildignore
 test/
