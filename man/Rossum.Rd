@@ -5,7 +5,7 @@
 \title{Rossum routine for ec25 calculation
 it fills in some specific rows marked for the Rossum method}
 \usage{
-Rossum(z = dataframeuitMaakKolomMeth)
+Rossum(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth)
 }
 \arguments{
 \item{dataframeuitMaakKolomMeth}{the fifth ec25 calculations start with a dataframe from McNeal

@@ -5,7 +5,7 @@
 \title{Blanquet routine for ec25 calculation
 it fills in some specific rows marked for the Blanquet method}
 \usage{
-Blanquet(z = dataframeuitMaakKolomMeth)
+Blanquet(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth)
 }
 \arguments{
 \item{dataframeuitMaakKolomMeth}{the first ec25 calculations start with a dataframe from MaakKolomMeth}

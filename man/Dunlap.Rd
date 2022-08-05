@@ -5,7 +5,7 @@
 \title{Dunlap routine for ec25 calculation
 it fills in some specific rows marked for the Dunlap method}
 \usage{
-Dunlap(z = dataframeuitMaakKolomMeth)
+Dunlap(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth)
 }
 \arguments{
 \item{dataframeuitMaakKolomMeth}{the second ec25 calculations start with a dataframe from Blanquet}

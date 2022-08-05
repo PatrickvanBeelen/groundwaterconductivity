@@ -1,5 +1,5 @@
-# globalVariables(c("LMM_broad_input_dataframe","celcius","add_bicarbonate","add_phosphate","dataframeuitMaakKolomMeth",
-#                   "inputfilename","inputstyle","outputstyle","celcius","rk20uitBlanquetIndataframeuitMaakKolomMeth"))
+globalVariables(c("LMM_broad_input_dataframe","celcius","add_bicarbonate","add_phosphate","dataframeuitMaakKolomMeth",
+                  "inputfilename","inputstyle","outputstyle","celcius","rk20uitBlanquetIndataframeuitMaakKolomMeth"))
 
 
 #' Prepare for the conductivity calculations by selecting the proper method
@@ -10,7 +10,7 @@
 #'
 MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe, celcius = celcius, add_bicarbonate = add_bicarbonate, add_phosphate = add_phosphate) {
   #   matrixnamen=c('xal',"xca","xcl","xfe","xhv","xk","xmg","xmn","xna","xnh4","xno3",'xpo4',"xso4",'xecv','xzn','xhco3','xco3')
-  
+  # LMM_broad_input_dataframe <-celcius <-add_bicarbonate<-add_phosphate<-NULL
   zm <- as.data.frame(LMM_broad_input_dataframe)
   if (!"xhv" %in% colnames(zm)) {
     zm$xhv <- NA
@@ -228,8 +228,8 @@ MaakKolomMeth <- function(LMM_broad_input_dataframe = LMM_broad_input_dataframe,
 #' it fills in some specific rows marked for the Blanquet method
 #' @param dataframeuitMaakKolomMeth the first ec25 calculations start with a dataframe from MaakKolomMeth 
 #' 
-Blanquet <- function(z = dataframeuitMaakKolomMeth) {
-  b <- z[z$meth == "blanquet", ]
+Blanquet <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
+  b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "blanquet", ]
   b$sqgem <- sqrt(b$sgem)
   b$rlngem <- log(b$sgem)
   b$kblan <- 1.046 * (107.73 * b$cl + 77.55 * b$hco3 + 109.02 * b$so4 + 20.97 * b$k - b$sqgem * (1.452 * b$cl + 1.228 * b$hco3 + 2.844 * b$so4 + 0.112 * b$k) + ((6.1 - 0.9 * b$sqgem) * b$cl + (6 - 2.067 * b$sqgem) * b$hco3 + (-3.1 - 7.274 * b$rlngem) * b$so4) * b$ca / b$sgem + ((-0.23 - 1.746 * b$rlngem) * b$cl + (6.43 - 4.047 * b$rlngem) * b$hco3 + (-7.8 - 4.831 * b$rlngem) * b$so4) * b$mg / b$sgem)
@@ -238,8 +238,8 @@ Blanquet <- function(z = dataframeuitMaakKolomMeth) {
   b[b$rhco3 >= 0.5 & !is.na(b$rhco3), "rk20"] <- 0.98 * b[b$rhco3 >= 0.5 & !is.na(b$rhco3), "kblan"] + 33
   b[b$rso4 >= 0.33 & !is.na(b$rso4), "rk20"] <- 0.8 * b[b$rso4 >= 0.33 & !is.na(b$rso4), "kblan"] + 309
   b[b$rso4 >= 0.33 & b$sgem >= 100 & !is.na(b$rso4) & !is.na(b$sgem), "rk20"] <- 1.02 * b[b$rso4 >= 0.33 & b$sgem >= 100 & !is.na(b$rso4) & !is.na(b$sgem), "kblan"] - 528
-  z[z$meth == "blanquet", "rk20"] <- b$rk20
-  rk20uitBlanquetIndataframeuitMaakKolomMeth <- z
+  dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "blanquet", "rk20"] <- b$rk20
+  rk20uitBlanquetIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitBlanquetIndataframeuitMaakKolomMeth)
 }
 
@@ -248,16 +248,16 @@ Blanquet <- function(z = dataframeuitMaakKolomMeth) {
 #' it fills in some specific rows marked for the Dunlap method
 #' @param dataframeuitMaakKolomMeth the second ec25 calculations start with a dataframe from Blanquet 
 #' 
-Dunlap <- function(z = dataframeuitMaakKolomMeth) {
-  b <- z[z$meth == "dunlap", ]
+Dunlap <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
+  b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "dunlap", ]
   b$A <- 35.35 * b$cl + 16.48 * b$hco3 + 24.02 * b$so4 + 75.63 * b$co3 + (b$na + b$k) * 22.99 + 19.04 * b$ca + 24.3 * b$mg
   b$B <- 4.3 * 10^-4 * (log(b$A))^7.888
   b$F <- 0.948 + 1.503 * 10^-6 * b$B
   b[b$B < 10 - 4, "F"] <- 1.101 - 3.252 * 10^-5 * b[b$B < 10 - 4, "B"]
   b$kdun <- b$F * b$B
   b$KDUN <- 7.456 * b$kdun^0.8198
-  z[z$meth == "dunlap", "rk20"] <- b$KDUN
-  rk20uitDunlapIndataframeuitMaakKolomMeth <- z
+  dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "dunlap", "rk20"] <- b$KDUN
+  rk20uitDunlapIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitDunlapIndataframeuitMaakKolomMeth)
 }
 
@@ -267,13 +267,13 @@ Dunlap <- function(z = dataframeuitMaakKolomMeth) {
 #' it fills in some specific rows marked for the Logan method
 #' @param dataframeuitMaakKolomMeth the third ec25 calculations start with a dataframe from Dunlap 
 #' 
-Logan <- function(z = dataframeuitMaakKolomMeth) {
-  b <- z[z$meth == "logan", ]
+Logan <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
+  b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "logan", ]
   b$klogan <- (222.28 * b$sgem)^0.9058
   b$rk20 <- b$klogan - 30
   b[b$sgem > 100 & !is.na(b$sgem), "rk20"] <- 1.002 * b[b$sgem > 100 & !is.na(b$sgem), "klogan"] - 83
-  z[z$meth == "logan", "rk20"] <- b$rk20
-  rk20uitLoganIndataframeuitMaakKolomMeth <- z
+  dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "logan", "rk20"] <- b$rk20
+  rk20uitLoganIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitLoganIndataframeuitMaakKolomMeth)
 }
 
@@ -282,9 +282,9 @@ Logan <- function(z = dataframeuitMaakKolomMeth) {
 #' it fills in some specific rows marked for the McNeal method
 #' @param dataframeuitMaakKolomMeth the forth ec25 calculations start with a dataframe from Logan 
 #' 
-McNeal <- function(z = dataframeuitMaakKolomMeth) {
+McNeal <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   #' McNeal routine voor ec25 berekening
-  b <- z[z$meth == "mcneal", ]
+  b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "mcneal", ]
   b$caT <- b$ca / 2000
   b$mgT <- b$mg / 2000
   b$so4T <- b$so4 / 2000
@@ -305,8 +305,8 @@ McNeal <- function(z = dataframeuitMaakKolomMeth) {
   # methode 2 overschrijft methode 1
   b$kmcneal <- 885 * (0.0620 * (b$cl + b$k) + 0.0355 * b$caf + 0.0269 * b$mgf + 0.0402 * b$na + 0.0407 * b$so4f + 0.0382 * b$co3 + 0.0291 * b$hco3 + 0.0528 * b$no3 + 0.0492 * (b$caso4 + b$mgso4) + (1 / b$san) * (0.23 * b$cl + 0.320 * b$hco3 + 0.590 * b$so4f + 0.400 * b$no3 + 0.51 * b$co3) + (1 / b$skat) * (0.260 * b$caf + 0.44 * b$mgf + 0.270 * b$na + 0.23 * b$k + 0.870 * (b$caso4 + b$mgso4)))
   b[b$sgem > 50 & !is.na(b$sgem), "KMCNEAL"] <- 0.953 * b[b$sgem > 50 & !is.na(b$sgem), "kmcneal"] + 58
-  z[z$meth == "mcneal", "rk20"] <- b$KMCNEAL
-  rk20uitMcNealIndataframeuitMaakKolomMeth <- z
+  dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "mcneal", "rk20"] <- b$KMCNEAL
+  rk20uitMcNealIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitMcNealIndataframeuitMaakKolomMeth)
 }
 
@@ -316,9 +316,9 @@ McNeal <- function(z = dataframeuitMaakKolomMeth) {
 #' it fills in some specific rows marked for the Rossum method
 #' @param dataframeuitMaakKolomMeth the fifth ec25 calculations start with a dataframe from McNeal 
 #' 
-Rossum <- function(z = dataframeuitMaakKolomMeth) {
+Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   #' Rossum volgens Ec_voor_Patrick.docx  voor ec25 berekening
-  b <- z[z$meth == "rossum", ]
+  b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "rossum", ]
   # van H+ naar milli-equivalent
   b$al <- 0
   b$g0an <- 86 * b$co3 + 44.5 * b$hco3 + 79.8 * b$so4 + 76.3 * b$cl + 71.4 * b$no3
@@ -335,8 +335,8 @@ Rossum <- function(z = dataframeuitMaakKolomMeth) {
   b[b$rso4 >= 0.33 & !is.na(b$rso4), "KROSS"] <- 0.989 * b[b$rso4 >= 0.33 & !is.na(b$rso4), "kross"]
   b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "KROSS"] <- 1.025 * b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "kross"] - 8
   
-  z[z$meth == "rossum", "rk20"] <- b$KROSS
-  rk20uitRossumIndataframeuitMaakKolomMeth <- z
+  dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "rossum", "rk20"] <- b$KROSS
+  rk20uitRossumIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitRossumIndataframeuitMaakKolomMeth)
 }
 

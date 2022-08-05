@@ -10,14 +10,18 @@
 #' \describe{
 #' \item{no}{number}
 #' \item{cl}{mg/Liter}
+#' \item{hco3}{mg/Liter}
+#' \item{co3}{mg/Liter}
+#' \item{so4}{mg/Liter}
+#' \item{no3}{mg/Liter}
 #' \item{h}{pH}
+#' \item{na}{mg/Liter}
+#' \item{k}{mg/Liter}
+#' \item{ca}{mg/Liter}
+#' \item{mg}{mg/Liter}
+#' \item{nh4}{mg/Liter}
 #' \item{k20meas}{measured conductivity at 20 celcius  µS/cm}
-#' \item{no}{number}
 #' \item{k20}{calculated conductivity at 20 celcius µS/cm}
-#' 
-#' 
-#' 
 #' }
-#' 
 #' 
 "input_dataframe"

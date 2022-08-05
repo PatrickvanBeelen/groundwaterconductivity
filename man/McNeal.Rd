@@ -5,7 +5,7 @@
 \title{McNeal routine for ec25 calculation
 it fills in some specific rows marked for the McNeal method}
 \usage{
-McNeal(z = dataframeuitMaakKolomMeth)
+McNeal(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth)
 }
 \arguments{
 \item{dataframeuitMaakKolomMeth}{the forth ec25 calculations start with a dataframe from Logan

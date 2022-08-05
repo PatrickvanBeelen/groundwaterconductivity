@@ -5,7 +5,7 @@
 \title{Logan routine for ec25 calculation
 it fills in some specific rows marked for the Logan method}
 \usage{
-Logan(z = dataframeuitMaakKolomMeth)
+Logan(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth)
 }
 \arguments{
 \item{dataframeuitMaakKolomMeth}{the third ec25 calculations start with a dataframe from Dunlap}
