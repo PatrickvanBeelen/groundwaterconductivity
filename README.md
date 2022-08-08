@@ -30,6 +30,25 @@ waters." Geochimica et cosmochimica acta 77: 369-382. The Dutch report
 gave accurate results over a much wider range of different groundwater
 types.
 
+## Installation
+You can install the development version of regexcite from GitHub with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jennybc/regexcite")
+'''
+
+## Usage
+```{r}
+library(groundwaterconductivity)
+input_dataframe <- calculate_conductivity()
+save(input_dataframe,file="input_dataframe.rda"
+my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_dataframe.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzandstyle",celcius=25)
+my_minimal_output<-calculate_conductivity(inputfilename="~/input_dataframe.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
+'''
+
+
+
 ## Requirements
 
 You will need a data frame with the concentrations of a number of ions.
