@@ -31,7 +31,7 @@ gave accurate results over a much wider range of different groundwater
 types.
 
 ## Installation
-You can install the development version of regexcite from GitHub with:
+You can install groundwaterconductivity from GitHub with:
 
 ```{r}
 # install.packages("devtools")
@@ -39,20 +39,27 @@ devtools::install_github("PatrickvanBeelen/groundwaterconductivity")
 ```
 
 ## Usage
+After installation you can load the library and start with the script. 
+
 ```{r}
 library(groundwaterconductivity)
-input_groundwaterconductivity <- calculate_conductivity()
-save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda"
-my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzand",celcius=25)
-my_minimal_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
 ```
 
+If you don't know what to do, type calculate_conductivity() and the script will generate the standard input data frame from the Stuyfzand report table 3.1. It is saved in the package under data/input_groundwaterconductivity.rda 
 
+
+```{r}
+input_groundwaterconductivity <- calculate_conductivity()
+save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda"
+
+my_Stuyfzand_output<-calculate_conductivity(inputfilename="input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzand",celcius=25)
+my_minimal_output<-calculate_conductivity(inputfilename="input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
+```
 
 ## Requirements
 
 You will need a data frame with the concentrations of a number of ions.
-See for example data/StuijzandTable31.csv The calculations can use
+See for example input_groundwaterconductivity.rda The calculations can use
 calcium, chloride, iron, potassium, magnesium, manganese, sodium,
 ammonium, nitrate, phosphate, zinc, bicarbonate, carbonate in
 milligrams/liter. Aluminum is used in microgram/liter and the pH is used

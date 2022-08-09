@@ -528,10 +528,9 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     add_bicarbonate <- TRUE
   }
 
-  # inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
-  # rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_input_groundwaterconductivity.rds")
-
-  # save(LMM_broad_input_groundwaterconductivity, file = "data/LMM_broad_input_groundwaterconductivity.rda")
+  inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
+  rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_input_groundwaterconductivity.rds")
+  save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
 
   dataframeuitMaakKolomMeth <- MaakKolomMeth(LMM_broad_input_groundwaterconductivity = LMM_broad_input_groundwaterconductivity, celcius = celcius, add_bicarbonate = add_bicarbonate, add_phosphate = add_phosphate)
   rk20uitBlanquetIndataframeuitMaakKolomMeth <- Blanquet(dataframeuitMaakKolomMeth)
@@ -598,8 +597,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
 
   with_all_calculated_conductivity <- h
-  # rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rds")
-  # saveRDS(with_all_calculated_conductivity, file = rdsname)
+  rdaname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rda")
+  save(with_all_calculated_conductivity, file = rdaname)
   # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
 
   # save(with_all_calculated_conductivity,file="data/with_all_calculated_conductivity.rda")
@@ -673,7 +672,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   }
 
 
-  if (outputstyle == "BroadLMMstyle") {
+  if (outputstyle == "BroadLMM") {
     inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
     newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
     rdsname <- paste0(inputname[1], "_", outputstyle, "_full.rds")
@@ -684,7 +683,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     # WriteListPointComma(with_calculated_conductivity, filename = newname)
   }
 
-  # save(with_calculated_conductivity,file="data/with_calculated_conductivity.rda")
+  save(with_calculated_conductivity,file="with_calculated_conductivity.rda")
 
   return(with_calculated_conductivity)
 }
+

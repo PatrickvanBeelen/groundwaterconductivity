@@ -1,6 +1,5 @@
 Package: groundwaterconductivity
-Title: Calculates the electrical conductivity of water, from the measured
-    cations and anions and compares that with the measured conductivity
+Title: Calculates the conductivity of water from the ionic composition
 Version: 0.0.0.9000
 Authors@R: 
     person("Patrick", "van Beelen", , "patrick.van.beelen@gmail.com", role = c("aut", "cre"),
