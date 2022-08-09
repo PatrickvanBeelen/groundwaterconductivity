@@ -15,7 +15,7 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
   if (!"xhv" %in% colnames(zm)) {
     zm$xhv <- NA
   }
-  
+
   if (!"xhco3" %in% colnames(zm)) {
     zm$xhco3 <- NA
   }
@@ -25,14 +25,14 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
   if (!"xhco3v" %in% colnames(zm)) {
     zm$xhco3v <- NA
   }
-  
+
   if (!"xpo4" %in% colnames(zm)) {
     zm$xpo4 <- NA
   }
   # in xhco3 stoppen we het gemiddelde van xhco3 en xhco3v
   # met de NAs niet meegenomen dus meer kans op een meetwaarde
   # alle NAs op nul zetten behalve pH en xhco3v
-  
+
   zm[is.na(zm$xhco3) & !is.na(zm$xhco3v), "xhco3e"] <- zm[is.na(zm$xhco3) & !is.na(zm$xhco3v), "xhco3v"]
   zm[!is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3e"] <- zm[!is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3"]
   zm[is.na(zm$xhco3) & is.na(zm$xhco3v), "xhco3e"] <- 0
@@ -81,18 +81,18 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
   # al is in microgram
   z$al <- 0.003 * zm$xal / 26.98
   z$zn <- 0.002 * zm$xzn / 65.39
-  
+
   z$po4 <- 3 * zm$xpo4 / 30.97
   # z bevat geen NAs in plaats daarvan nullen
-  
+
   # nu staan er nog nullen in z$po4
   if (add_phosphate) {
     # als z$po4=0 dan gebruiken we zm$xptot
     z[z$po4 == 0, "po4"] <- 3 * zm[zm$xpo4 == 0, "xptot"] / 30.97
   }
-  
+
   # alles omgezet van zm naar z behalve xecv
-  
+
   #  ionbalans
   z$pos <- z$al + z$ca + 0.6 * z$fe + z$k + z$mg + z$mn + z$nh4 + z$na + z$zn + z$h3o
   z$neg <- z$cl + z$hco3 + z$no3 + z$so4 + z$co3 + z$po4
@@ -102,7 +102,7 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
   #  maar xecv wordt omgerekend naar 25 graden celcius
   TK <- 273.15 + celcius
   z$oh <- (1000 * 10^(6.0875 - 0.01706 * TK - 4470.99 / TK)) / z$h3o
-  
+
   # The bicarbonate anion is in equilibrium with CO2 gas from the air. It therefore can escape from sampling through the air.
   # At the LMM monitoring network we have chosen not to sample bicarbonate.
   # In that case the bicarbonate concentration can only be roughly estimated from the ion balance when one assumes that there are equal charge equivalents from cations and anions.
@@ -213,7 +213,7 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
   myrows[is.na(myrows)] <- FALSE
   z[myrows, "meth_"] <- "leeg"
   z[myrows, "meth"] <- "leeg"
-  
+
   z$rk20 <- as.numeric(0)
   dataframeuitMaakKolomMeth <- z
   return(dataframeuitMaakKolomMeth)
@@ -226,8 +226,8 @@ MaakKolomMeth <- function(LMM_broad_input_groundwaterconductivity = LMM_broad_in
 
 #' Blanquet routine for ec25 calculation
 #' it fills in some specific rows marked for the Blanquet method
-#' @param dataframeuitMaakKolomMeth the first ec25 calculations start with a dataframe from MaakKolomMeth 
-#' 
+#' @param dataframeuitMaakKolomMeth the first ec25 calculations start with a dataframe from MaakKolomMeth
+#'
 Blanquet <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "blanquet", ]
   b$sqgem <- sqrt(b$sgem)
@@ -246,8 +246,8 @@ Blanquet <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 
 #' Dunlap routine for ec25 calculation
 #' it fills in some specific rows marked for the Dunlap method
-#' @param dataframeuitMaakKolomMeth the second ec25 calculations start with a dataframe from Blanquet 
-#' 
+#' @param dataframeuitMaakKolomMeth the second ec25 calculations start with a dataframe from Blanquet
+#'
 Dunlap <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "dunlap", ]
   b$A <- 35.35 * b$cl + 16.48 * b$hco3 + 24.02 * b$so4 + 75.63 * b$co3 + (b$na + b$k) * 22.99 + 19.04 * b$ca + 24.3 * b$mg
@@ -265,8 +265,8 @@ Dunlap <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 
 #' Logan routine for ec25 calculation
 #' it fills in some specific rows marked for the Logan method
-#' @param dataframeuitMaakKolomMeth the third ec25 calculations start with a dataframe from Dunlap 
-#' 
+#' @param dataframeuitMaakKolomMeth the third ec25 calculations start with a dataframe from Dunlap
+#'
 Logan <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "logan", ]
   b$klogan <- (222.28 * b$sgem)^0.9058
@@ -280,8 +280,8 @@ Logan <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 
 #' McNeal routine for ec25 calculation
 #' it fills in some specific rows marked for the McNeal method
-#' @param dataframeuitMaakKolomMeth the forth ec25 calculations start with a dataframe from Logan 
-#' 
+#' @param dataframeuitMaakKolomMeth the forth ec25 calculations start with a dataframe from Logan
+#'
 McNeal <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   #' McNeal routine voor ec25 berekening
   b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "mcneal", ]
@@ -314,8 +314,8 @@ McNeal <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 
 #' Rossum routine for ec25 calculation
 #' it fills in some specific rows marked for the Rossum method
-#' @param dataframeuitMaakKolomMeth the fifth ec25 calculations start with a dataframe from McNeal 
-#' 
+#' @param dataframeuitMaakKolomMeth the fifth ec25 calculations start with a dataframe from McNeal
+#'
 Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   #' Rossum volgens Ec_voor_Patrick.docx  voor ec25 berekening
   b <- dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "rossum", ]
@@ -334,7 +334,7 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
   b[b$rcl >= 0.67 & !is.na(b$rcl), "KROSS"] <- 1.0003 * b[b$rcl >= 0.67 & !is.na(b$rcl), "kross"] - 2
   b[b$rso4 >= 0.33 & !is.na(b$rso4), "KROSS"] <- 0.989 * b[b$rso4 >= 0.33 & !is.na(b$rso4), "kross"]
   b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "KROSS"] <- 1.025 * b[b$rhco3 >= 0.67 & !is.na(b$rhco3), "kross"] - 8
-  
+
   dataframeuitMaakKolomMeth[dataframeuitMaakKolomMeth$meth == "rossum", "rk20"] <- b$KROSS
   rk20uitRossumIndataframeuitMaakKolomMeth <- dataframeuitMaakKolomMeth
   return(rk20uitRossumIndataframeuitMaakKolomMeth)
@@ -346,7 +346,7 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' Calculate the conductivity of groundwater from its ionic composition
 #' @description
 #' you will need a data frame with the concentrations of a number of ions
-#' as shown in data/StuyfzandTable31.csv
+#' as shown in data/input_groun
 #' The calculations can use calcium, chloride, Iran, potassium, magnesium, manganese, sodium, ammonium, nitrate, phosphate, zinc, #' bicarbonate, carbonate in milligrams/liter.
 #' Aluminum is used in microgram/liter and the pH is used as such.
 #' The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
@@ -361,7 +361,7 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' @export
 calculate_conductivity <- function(inputfilename="data/input_groundwaterconductivity.rda",
                                   inputstyle = "Stuyfzand",
-                                   outputstyle = "Stuyfzandstyle",
+                                   outputstyle = "Stuyfzand",
                                    celcius = 25) {
   if (inputstyle == "Stuyfzand") {
     # read the original inputfile and save with extra myrownames column
@@ -419,72 +419,72 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
                      215900L)),
                 class = "data.frame", row.names = c(NA, -34L))
 
-      
-    } 
-    
-    
-    {
-      
+
     }
-    
+
+
+    {
+
+    }
+
     # good_ec25 <- c(
     #   7.62, 166.53, 51.38, 142.6, 57.17, 182.97, 65.26, 140.65, 82.02,
     #   115.11, 190.82, 36.61, 737.73, 293.23, 826.06, 296.6, 551.47,
     #   272.57, 663.96, 1110, 1670.92, 938.41, 6.15, 1308.44, 1256.22,
     #   4073, 7625.13, 24358.73, 23.96, 8.26, 38.78, 10.41, 33.16, 56.51
     # )
-    # 
-    # input_groundwaterconductivity<-structure(list(no = 1:34, 
-    #                cl = c(5, 32, 4.4, 17.7, 14.9, 83, 
-    #                                  15.6, 16.3, 33, 196, 39, 11, 113, 476, 42, 34, 128, 206, 190, 
-    #                                  349, 326, 2084, 92, 850, 714, 1790, 3300, 5285, 386, 3120, 4230, 
-    #                                  15500, 25350, 189000), 
-    #           hco3 = c(38L, 171L, 0L, 55L, 0L, 0L, 0L, 113L, 307L, 716L, 101L, 415L, 32L, 226L, 185L, 352L, 201L, 212L, 
-    #                        917L, 4750L, 762L, 1910L, 732L, 72L, 255L, 621L, 1710L, 2635L, 
-    #                        134L, 140L, 480L, 261L, 256L, 40L), 
-    #           so4 = c(0.9, 0, 5.5, 38.4, 
-    #                         2.5, 19.5, 8.9, 21, 1, 6, 116, 437, 62, 17, 63, 140, 48, 100, 
-    #                           5, 190, 372, 2, 879, 2130, 19, 230, 27, 4, 5005, 2426, 274, 2050, 
-    #                           11170, 11700), 
-    #           no3 = c(1.5, 0.1, 3.4, 0, 1.5, 13.1, 8, 24.8, 
-    #                       0.1, 0, 0.6, 0, 0, 0, 69.5, 372, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9, 
-    #                      0, 0, 0, 0, 0, 0, 0, 63), 
-    #           co3 = c(0L, 0L, 0L, 0L, 0L, 0L, 0L, 
-    #                     0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 30L, 
-    #                     0L, 0L, 0L, 0L, 0L, 0L, 3L, 0L, 0L, 0L, 0L), h = c(7.6, 7.91, 
-    #                     4.07, 7, 4.19, 3.96, 4.63, 7.57, 7.34, 7.77, 7, 7, 6.2, 8, 7.57, 
-    #                     7.04, 7, 7.53, 7.26, 7, 7, 7, 7, 7.3, 7.73, 7.53, 6.94, 7, 7, 
-    #                      7, 7.12, 7.18, 7, 7), 
-    #           na = c(5.9, 23, 1.5, 16.1, 7.9, 45.3, 8.1, 
-    #                     6, 20, 350, 23, 297, 62, 165, 26, 19, 161, 103, 170, 1901, 650, 
-    #                     1540, 738, 462, 316, 1290, 1900, 3300, 1957, 2415, 1437, 8300, 
-    #                     20050, 121000), 
-    #           k = c(0.8, 10.9, 0.2, 3.9, 0.37, 2.17, 0.75, 
-    #                     0.66, 6.3, 7.4, 2.8, 3.9, 3.7, 22.8, 1.9, 0.3, 0, 2.4, 13.1, 
-    #                     96, 0, 44, 3.9, 9.1, 30.7, 32.7, 76, 95, 19.6, 58.7, 21.5, 300, 
-    #                     670, 3700), 
-    #           ca = c(6.5, 14, 1, 20, 1, 6.2, 3.3, 53.3, 79, 29, 
-    #                58, 20, 29, 112, 101, 285, 18, 121, 200, 106, 10, 102, 16, 696, 
-    #                80, 60, 236, 160, 425, 357, 1038, 430, 1065, 722), 
-    #           mg = c(2.6, 
-    #                21, 0.4, 4.9, 0.95, 5.6, 1.3, 3, 7.9, 10, 13, 26.7, 9.1, 52, 
-    #                5, 4.1, 0, 4.7, 12.5, 11.5, 7, 154, 10.9, 204, 75, 69, 290, 390, 
-    #                128, 202, 205, 1110, 115, 2490), 
-    #           nh4 = c(0, 0.4, 0.7, 0, 0.3, 
-    #                1.2, 1.9, 0.1, 2.3, 3, 0, 0, 0.4, 1.4, 0.1, 0.1, 0, 0.3, 26.4, 
-    #                0, 0, 37, 0, 0, 0.9, 0.3, 0, 70, 0, 0, 10.1, 8.6, 0, 0), 
-    #           k20meas = c(67L, 
-    #                326L, 48L, 212L, 65L, 334L, 87L, 282L, 486L, 1445L, 458L, 1204L, 
-    #                505L, 1660L, 585L, 1248L, 735L, 1021L, 1680L, 6455L, 2580L, 7200L, 
-    #                2645L, 4965L, 2440L, 5810L, 9600L, 14950L, 8340L, 11600L, 11250L, 
-    #                36300L, 65800L, 199100L), 
-    #           k20 = c(67L, 322L, 52L, 212L, 70L, 
-    #                340L, 85L, 293L, 492L, 1463L, 456L, 1261L, 505L, 1620L, 578L, 
-    #                1246L, 726L, 1018L, 1663L, 6530L, 2630L, 7320L, 2625L, 4905L, 
-    #                2412L, 5880L, 9824L, 14800L, 8310L, 11600L, 11250L, 36100L, 67500L, 
-    #                215900L)), 
+    #
+    # input_groundwaterconductivity<-structure(list(no = 1:34,
+    #                cl = c(5, 32, 4.4, 17.7, 14.9, 83,
+    #                                  15.6, 16.3, 33, 196, 39, 11, 113, 476, 42, 34, 128, 206, 190,
+    #                                  349, 326, 2084, 92, 850, 714, 1790, 3300, 5285, 386, 3120, 4230,
+    #                                  15500, 25350, 189000),
+    #           hco3 = c(38L, 171L, 0L, 55L, 0L, 0L, 0L, 113L, 307L, 716L, 101L, 415L, 32L, 226L, 185L, 352L, 201L, 212L,
+    #                        917L, 4750L, 762L, 1910L, 732L, 72L, 255L, 621L, 1710L, 2635L,
+    #                        134L, 140L, 480L, 261L, 256L, 40L),
+    #           so4 = c(0.9, 0, 5.5, 38.4,
+    #                         2.5, 19.5, 8.9, 21, 1, 6, 116, 437, 62, 17, 63, 140, 48, 100,
+    #                           5, 190, 372, 2, 879, 2130, 19, 230, 27, 4, 5005, 2426, 274, 2050,
+    #                           11170, 11700),
+    #           no3 = c(1.5, 0.1, 3.4, 0, 1.5, 13.1, 8, 24.8,
+    #                       0.1, 0, 0.6, 0, 0, 0, 69.5, 372, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9,
+    #                      0, 0, 0, 0, 0, 0, 0, 63),
+    #           co3 = c(0L, 0L, 0L, 0L, 0L, 0L, 0L,
+    #                     0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 30L,
+    #                     0L, 0L, 0L, 0L, 0L, 0L, 3L, 0L, 0L, 0L, 0L), h = c(7.6, 7.91,
+    #                     4.07, 7, 4.19, 3.96, 4.63, 7.57, 7.34, 7.77, 7, 7, 6.2, 8, 7.57,
+    #                     7.04, 7, 7.53, 7.26, 7, 7, 7, 7, 7.3, 7.73, 7.53, 6.94, 7, 7,
+    #                      7, 7.12, 7.18, 7, 7),
+    #           na = c(5.9, 23, 1.5, 16.1, 7.9, 45.3, 8.1,
+    #                     6, 20, 350, 23, 297, 62, 165, 26, 19, 161, 103, 170, 1901, 650,
+    #                     1540, 738, 462, 316, 1290, 1900, 3300, 1957, 2415, 1437, 8300,
+    #                     20050, 121000),
+    #           k = c(0.8, 10.9, 0.2, 3.9, 0.37, 2.17, 0.75,
+    #                     0.66, 6.3, 7.4, 2.8, 3.9, 3.7, 22.8, 1.9, 0.3, 0, 2.4, 13.1,
+    #                     96, 0, 44, 3.9, 9.1, 30.7, 32.7, 76, 95, 19.6, 58.7, 21.5, 300,
+    #                     670, 3700),
+    #           ca = c(6.5, 14, 1, 20, 1, 6.2, 3.3, 53.3, 79, 29,
+    #                58, 20, 29, 112, 101, 285, 18, 121, 200, 106, 10, 102, 16, 696,
+    #                80, 60, 236, 160, 425, 357, 1038, 430, 1065, 722),
+    #           mg = c(2.6,
+    #                21, 0.4, 4.9, 0.95, 5.6, 1.3, 3, 7.9, 10, 13, 26.7, 9.1, 52,
+    #                5, 4.1, 0, 4.7, 12.5, 11.5, 7, 154, 10.9, 204, 75, 69, 290, 390,
+    #                128, 202, 205, 1110, 115, 2490),
+    #           nh4 = c(0, 0.4, 0.7, 0, 0.3,
+    #                1.2, 1.9, 0.1, 2.3, 3, 0, 0, 0.4, 1.4, 0.1, 0.1, 0, 0.3, 26.4,
+    #                0, 0, 37, 0, 0, 0.9, 0.3, 0, 70, 0, 0, 10.1, 8.6, 0, 0),
+    #           k20meas = c(67L,
+    #                326L, 48L, 212L, 65L, 334L, 87L, 282L, 486L, 1445L, 458L, 1204L,
+    #                505L, 1660L, 585L, 1248L, 735L, 1021L, 1680L, 6455L, 2580L, 7200L,
+    #                2645L, 4965L, 2440L, 5810L, 9600L, 14950L, 8340L, 11600L, 11250L,
+    #                36300L, 65800L, 199100L),
+    #           k20 = c(67L, 322L, 52L, 212L, 70L,
+    #                340L, 85L, 293L, 492L, 1463L, 456L, 1261L, 505L, 1620L, 578L,
+    #                1246L, 726L, 1018L, 1663L, 6530L, 2630L, 7320L, 2625L, 4905L,
+    #                2412L, 5880L, 9824L, 14800L, 8310L, 11600L, 11250L, 36100L, 67500L,
+    #                215900L)),
     #           class = "data.frame", row.names = c(NA, -34L))
-    
+
 
     # input_groundwaterconductivity <- ReadListPointComma(inputfilename)
     myrownames <- row.names(input_groundwaterconductivity)
@@ -603,7 +603,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
 
   # save(with_all_calculated_conductivity,file="data/with_all_calculated_conductivity.rda")
-  if (outputstyle == "Stuyfzandstyle") {
+  if (outputstyle == "Stuyfzand") {
     # input_groundwaterconductivity <- ReadListPointComma(inputfilename)
 
     # inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
@@ -669,7 +669,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     # if (substring(newname, nchar(newname) - 2, nchar(newname)) == "rds") {
     #   saveRDS(with_calculated_conductivity, file = newname)
     # }
-    
+
   }
 
 
@@ -685,6 +685,6 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   }
 
   # save(with_calculated_conductivity,file="data/with_calculated_conductivity.rda")
-  
+
   return(with_calculated_conductivity)
 }

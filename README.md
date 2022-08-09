@@ -41,10 +41,10 @@ devtools::install_github("jennybc/regexcite")
 ## Usage
 ```{r}
 library(groundwaterconductivity)
-input_dataframe <- calculate_conductivity()
-save(input_dataframe,file="input_dataframe.rda"
-my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_dataframe.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzandstyle",celcius=25)
-my_minimal_output<-calculate_conductivity(inputfilename="~/input_dataframe.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
+input_groundwaterconductivity <- calculate_conductivity()
+save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda"
+my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzandstyle",celcius=25)
+my_minimal_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
 '''
 
 
@@ -77,7 +77,7 @@ As for now the following input styles are supported: KRWQCinput,
 Stuyfzand, broadLMM, broadLGW. To check whether your input file matches
 the expectations of the selected input style an intermediate standard
 input file is produced named
-StuyfzandTable31_Stuyfzandstyle_LMM_broad_input_dataframe.rds for the
+StuyfzandTable31_Stuyfzandstyle_LMM_broad_input_groundwaterconductivity.rds for the
 input file StuyfzandTable31.csv and the Stuyfzandstyle input style. Note
 that the elements are preceded with an x and are expressed in
 milligrams/liter except for xal which is expressed in microgram/liter,

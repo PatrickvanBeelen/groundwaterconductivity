@@ -5,14 +5,14 @@
 \title{Prepare for the conductivity calculations by selecting the proper method}
 \usage{
 MaakKolomMeth(
-  LMM_broad_input_dataframe = LMM_broad_input_dataframe,
+  LMM_broad_input_groundwaterconductivity = LMM_broad_input_groundwaterconductivity,
   celcius = celcius,
   add_bicarbonate = add_bicarbonate,
   add_phosphate = add_phosphate
 )
 }
 \arguments{
-\item{LMM_broad_input_dataframe}{your input file was converted to the standard inputfile used here}
+\item{LMM_broad_input_groundwaterconductivity}{your input file was converted to the standard inputfile used here}
 
 \item{celcius}{temperature numerical}
 

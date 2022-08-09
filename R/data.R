@@ -1,27 +1,26 @@
-#' input_groundwaterconductivity.
+' Input file for groundwaterconductivity
 #'
-# 'The method is described in a Dutch report by Stuyfzand, P. (1987). 
-#' Een zeer nauwkeurige berekening van het elektrisch geleidingsvermogen, ter controle en aanvulling van wateranalyses: 2e versie. 
-#' Rijswijk, KIWA. 
-# 'Table 3.1 of this report is used to test the calculations. The table 3.1 is shown in data/input_groundwaterconductivity.rda
+#' A dataset with table 3.1 from a Dutch report by Stuyfzand, P. (1987). 
+#' Een zeer nauwkeurige berekening van het elektrisch geleidingsvermogen, 
+#' ter controle en aanvulling van wateranalyses: 2e versie. Rijswijk, KIWA. 
 #' 
 #'
-#' @format A data frame with 34 variables:
+#' @format A data frame with 34 rows and 15 variables:
 #' \describe{
-#' \item{no}{number}
-#' \item{cl}{mg/Liter}
-#' \item{hco3}{mg/Liter}
-#' \item{co3}{mg/Liter}
-#' \item{so4}{mg/Liter}
-#' \item{no3}{mg/Liter}
-#' \item{h}{pH}
-#' \item{na}{mg/Liter}
-#' \item{k}{mg/Liter}
-#' \item{ca}{mg/Liter}
-#' \item{mg}{mg/Liter}
-#' \item{nh4}{mg/Liter}
-#' \item{k20meas}{measured conductivity at 20 celcius  µS/cm}
-#' \item{k20}{calculated conductivity at 20 celcius µS/cm}
+#'   \item{no}{row number}
+#'   \item{cl}{mg/liter}
+#'   \item{hco3}{mg/liter}
+#'   \item{so4}{mg/liter}
+#'   \item{no3}{mg/liter}
+#'   \item{co3}{mg/liter}
+#'   \item{h}{pH}
+#'   \item{na}{mg/liter}
+#'   \item{k}{mg/liter}
+#'   \item{ca}{mg/liter}
+#'   \item{mg}{mg/liter}
+#'   \item{nh4}{mg/liter}
+#'   \item{k20meas}{measured conductivity µS/cm at 20 Celcius}
+#'   \item{k20}{calculated conductivity µS/cm at 20 Celcius}
+#'   ...
 #' }
-#' 
 "input_groundwaterconductivity"

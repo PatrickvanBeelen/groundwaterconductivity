@@ -37,6 +37,10 @@ myoutputdataframe\<-calculate_conductivity(inputfilename="data/Table.csv",inputs
 
 The calculations will be performed. You can replace data/Table.csv with your own data.
 
+```{r}
+
+```
+
 ## Data input
 
 The groundwater conductivity calculations require proper names and dimensions of the input parameters needed to calculate the conductivity. Table 1 below presents the name, content and dimension of the parameters needed. The first rows from rownumber to Calculated conductivity are also present in Table 3.1 of the Stuyfzand report and are used for the quality test of the calculations. Stuyfzand did not use aluminum, iron, phosphate, manganese and zinc to validate his method. The Dutch Minerals Monitoring Policy Program is using the groundwater conductivity calculations presented here for decades. This program is abbreviated to LMM in Dutch and has its own parameter names and dimensions. In most cases milligrams/liter is used except for a few differences mentioned in column LMM dimension.
