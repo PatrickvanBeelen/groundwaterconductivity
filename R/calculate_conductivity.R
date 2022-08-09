@@ -597,8 +597,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
 
   with_all_calculated_conductivity <- h
-  rdaname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rda")
-  save(with_all_calculated_conductivity, file = rdaname)
+  # rdaname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rda")
+  save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
   # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
 
   # save(with_all_calculated_conductivity,file="data/with_all_calculated_conductivity.rda")
