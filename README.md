@@ -35,7 +35,7 @@ You can install the development version of regexcite from GitHub with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("jennybc/regexcite")
+devtools::install_github("PatrickvanBeelen/groundwaterconductivity")
 '''
 
 ## Usage
@@ -43,7 +43,7 @@ devtools::install_github("jennybc/regexcite")
 library(groundwaterconductivity)
 input_groundwaterconductivity <- calculate_conductivity()
 save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda"
-my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzandstyle",celcius=25)
+my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzand",celcius=25)
 my_minimal_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
 '''
 
@@ -78,7 +78,7 @@ Stuyfzand, broadLMM, broadLGW. To check whether your input file matches
 the expectations of the selected input style an intermediate standard
 input file is produced named
 StuyfzandTable31_Stuyfzandstyle_LMM_broad_input_groundwaterconductivity.rds for the
-input file StuyfzandTable31.csv and the Stuyfzandstyle input style. Note
+input file input_groundwaterconductivity.rda and the Stuyfzand input style. Note
 that the elements are preceded with an x and are expressed in
 milligrams/liter except for xal which is expressed in microgram/liter,
 xpo4 which is expressed in milligrams P/liter. xhv is the pH and xecv is
@@ -88,9 +88,9 @@ This was manually calculated from the k20 measured correcting for the
 
 ## Output
 If you have installed the package library(groundwaterconductivity) will load the functions. If you run:
-
-myoutputdataframe<-calculate_conductivity(inputfilename="data/Table.csv",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
-
+'''{r}
+myoutputdataframe<-calculate_conductivity(inputfilename="data/input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
+'''
 The calculations will be performed. You can replace data/Table.csv with your own data. 
 
 The file StuyfzandTable31_Stuyfzand_LMM_broad_output_dataframe.rds
