@@ -351,7 +351,7 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' Aluminum is used in microgram/liter and the pH is used as such.
 #' The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 #' Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
-#' myoutputdataframe<-calculate_conductivity(inputfilename="data/input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
+#' myoutputdataframe<-calculate_conductivity(inputfilename="input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
 #' @param inputfilename The name of the input file in data
 #' @param inputstyle The layout of the input file like column names etc
 #' @param outputstyle The layout of the output file
@@ -434,59 +434,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     #   4073, 7625.13, 24358.73, 23.96, 8.26, 38.78, 10.41, 33.16, 56.51
     # )
     #
-    # input_groundwaterconductivity<-structure(list(no = 1:34,
-    #                cl = c(5, 32, 4.4, 17.7, 14.9, 83,
-    #                                  15.6, 16.3, 33, 196, 39, 11, 113, 476, 42, 34, 128, 206, 190,
-    #                                  349, 326, 2084, 92, 850, 714, 1790, 3300, 5285, 386, 3120, 4230,
-    #                                  15500, 25350, 189000),
-    #           hco3 = c(38L, 171L, 0L, 55L, 0L, 0L, 0L, 113L, 307L, 716L, 101L, 415L, 32L, 226L, 185L, 352L, 201L, 212L,
-    #                        917L, 4750L, 762L, 1910L, 732L, 72L, 255L, 621L, 1710L, 2635L,
-    #                        134L, 140L, 480L, 261L, 256L, 40L),
-    #           so4 = c(0.9, 0, 5.5, 38.4,
-    #                         2.5, 19.5, 8.9, 21, 1, 6, 116, 437, 62, 17, 63, 140, 48, 100,
-    #                           5, 190, 372, 2, 879, 2130, 19, 230, 27, 4, 5005, 2426, 274, 2050,
-    #                           11170, 11700),
-    #           no3 = c(1.5, 0.1, 3.4, 0, 1.5, 13.1, 8, 24.8,
-    #                       0.1, 0, 0.6, 0, 0, 0, 69.5, 372, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.9,
-    #                      0, 0, 0, 0, 0, 0, 0, 63),
-    #           co3 = c(0L, 0L, 0L, 0L, 0L, 0L, 0L,
-    #                     0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 30L,
-    #                     0L, 0L, 0L, 0L, 0L, 0L, 3L, 0L, 0L, 0L, 0L), h = c(7.6, 7.91,
-    #                     4.07, 7, 4.19, 3.96, 4.63, 7.57, 7.34, 7.77, 7, 7, 6.2, 8, 7.57,
-    #                     7.04, 7, 7.53, 7.26, 7, 7, 7, 7, 7.3, 7.73, 7.53, 6.94, 7, 7,
-    #                      7, 7.12, 7.18, 7, 7),
-    #           na = c(5.9, 23, 1.5, 16.1, 7.9, 45.3, 8.1,
-    #                     6, 20, 350, 23, 297, 62, 165, 26, 19, 161, 103, 170, 1901, 650,
-    #                     1540, 738, 462, 316, 1290, 1900, 3300, 1957, 2415, 1437, 8300,
-    #                     20050, 121000),
-    #           k = c(0.8, 10.9, 0.2, 3.9, 0.37, 2.17, 0.75,
-    #                     0.66, 6.3, 7.4, 2.8, 3.9, 3.7, 22.8, 1.9, 0.3, 0, 2.4, 13.1,
-    #                     96, 0, 44, 3.9, 9.1, 30.7, 32.7, 76, 95, 19.6, 58.7, 21.5, 300,
-    #                     670, 3700),
-    #           ca = c(6.5, 14, 1, 20, 1, 6.2, 3.3, 53.3, 79, 29,
-    #                58, 20, 29, 112, 101, 285, 18, 121, 200, 106, 10, 102, 16, 696,
-    #                80, 60, 236, 160, 425, 357, 1038, 430, 1065, 722),
-    #           mg = c(2.6,
-    #                21, 0.4, 4.9, 0.95, 5.6, 1.3, 3, 7.9, 10, 13, 26.7, 9.1, 52,
-    #                5, 4.1, 0, 4.7, 12.5, 11.5, 7, 154, 10.9, 204, 75, 69, 290, 390,
-    #                128, 202, 205, 1110, 115, 2490),
-    #           nh4 = c(0, 0.4, 0.7, 0, 0.3,
-    #                1.2, 1.9, 0.1, 2.3, 3, 0, 0, 0.4, 1.4, 0.1, 0.1, 0, 0.3, 26.4,
-    #                0, 0, 37, 0, 0, 0.9, 0.3, 0, 70, 0, 0, 10.1, 8.6, 0, 0),
-    #           k20meas = c(67L,
-    #                326L, 48L, 212L, 65L, 334L, 87L, 282L, 486L, 1445L, 458L, 1204L,
-    #                505L, 1660L, 585L, 1248L, 735L, 1021L, 1680L, 6455L, 2580L, 7200L,
-    #                2645L, 4965L, 2440L, 5810L, 9600L, 14950L, 8340L, 11600L, 11250L,
-    #                36300L, 65800L, 199100L),
-    #           k20 = c(67L, 322L, 52L, 212L, 70L,
-    #                340L, 85L, 293L, 492L, 1463L, 456L, 1261L, 505L, 1620L, 578L,
-    #                1246L, 726L, 1018L, 1663L, 6530L, 2630L, 7320L, 2625L, 4905L,
-    #                2412L, 5880L, 9824L, 14800L, 8310L, 11600L, 11250L, 36100L, 67500L,
-    #                215900L)),
-    #           class = "data.frame", row.names = c(NA, -34L))
 
-
-    # input_groundwaterconductivity <- ReadListPointComma(inputfilename)
     myrownames <- row.names(input_groundwaterconductivity)
     s <- cbind(input_groundwaterconductivity, myrownames)
     matrixnamen <- c("xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg", "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn", "xhco3", "xco3", "myrownames")
@@ -515,23 +463,17 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   }
 
   if (inputstyle == "broadLMM") {
-    # read the original inputfile and save with extra myrownames column
-    # LMM_broad_input_groundwaterconductivity <- LoadFileInVariable(inputfilename)
     add_phosphate <- FALSE
     add_bicarbonate <- TRUE
   }
 
   if (inputstyle == "broadLGW") {
-    # read the original inputfile and save with extra myrownames column
-    # LMM_broad_input_groundwaterconductivity <- LoadFileInVariable(inputfilename)
-    add_phosphate <- TRUE
+     add_phosphate <- TRUE
     add_bicarbonate <- TRUE
   }
-
-  inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
-  rdsname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_input_groundwaterconductivity.rds")
+  # save standardized inputfile
   save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
-
+  # select proper methods per row
   dataframeuitMaakKolomMeth <- MaakKolomMeth(LMM_broad_input_groundwaterconductivity = LMM_broad_input_groundwaterconductivity, celcius = celcius, add_bicarbonate = add_bicarbonate, add_phosphate = add_phosphate)
   rk20uitBlanquetIndataframeuitMaakKolomMeth <- Blanquet(dataframeuitMaakKolomMeth)
   rk20uitLoganIndataframeuitMaakKolomMeth <- Logan(rk20uitBlanquetIndataframeuitMaakKolomMeth)
@@ -540,15 +482,13 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   z <- Rossum(rk20uitMcNealIndataframeuitMaakKolomMeth)
 
   h <- merge(x = LMM_broad_input_groundwaterconductivity, y = z, by = "myrownames", all.x = TRUE, suffixes = c(" mg/l", " meq/l"))
-  # hx <- dplyr::left_join(s, z, by = "myrownames", suffix = c(" mg/l", " meq/l"))
   # omrekenen naar 25 celcius en mS/m ipv uS/cm
   # temperatuur formule uit SWE 87-006
   h$ec25 <- 0.10 * h$rk20 / (1 - 0.023 * 5)
   if (!"xecv" %in% names(h)) {
     h$xecv <- 0.10 * h$k20 / (1 - 0.023 * 5)
   }
-  # h is net zo lang als with_calculated_conductivity
-  # alle afwezige en negatieve xecv eruit halen
+  # remove rows without proper data
   myrows <- h$xecv > 0 & !h$meth == "leeg" & h$ec25 > 0 & !h$ec25 == Inf
   myrows[is.na(myrows)] <- FALSE
   mlm <- lm(log10(h[myrows, "ec25"]) ~ log10(h[myrows, "xecv"]))
@@ -560,15 +500,9 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   h$prinslabel <- (h$xecv * (1 + h$pxecv) < h$ec25 * (1 - h$pec25)) | (h$xecv * (1 - h$pxecv) > h$ec25 * (1 + h$pec25))
   h$percentage_xecv_ec25 <- 100 * (h$xecv - h$ec25) / h$ec25
 
-  #
   ionbalancelm <- lm(log10(h[myrows, "skat"]) ~ log10(h[myrows, "san"]))
   h[myrows, "skat_san_sr"] <- rstandard(ionbalancelm)
 
-  # plot(log10(h[myrows, "skat"]),log10(h[myrows, "san"]))
-  # abline(coef = c(0,1))
-
-  # hanions <- c("cl meq/l", "hco3 meq/l", "so4 meq/l", "no3 meq/l", "co3 meq/l", "oh")
-  # hkations <- c("h3o", "na meq/l", "k meq/l", "ca meq/l", "mg meq/l", "nh4 meq/l", "fe", "mn")
   hanions <- c("cl", "hco3", "so4", "no3", "co3", "oh")
   hkations <- c("h3o", "na", "k", "ca", "mg", "nh4", "fe", "mn")
 
@@ -591,22 +525,11 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   # When the calculated conductivity is much higher than the measured one and the ion balance has an excess of anions,
   # then the anion with the maximum concentration of milliequivalents is suspect.
   h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
-  # z$san <- z$cl + z$hco3 + z$so4 + z$no3 + z$co3 + z$oh
-  # z$skat <- z$h3o + z$na + z$k + z$ca + z$mg + z$nh4 + z$fe + z$mn
-  #
-
 
   with_all_calculated_conductivity <- h
-  # rdaname <- paste0(inputname[1], "_", inputstyle, "_LMM_broad_output_dataframe.rda")
   save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
-  # h<- readRDS("/rivm/r/M350001_ondersteuning_mestbeleid_data/Patrick/groundwaterconductivity/data/Table_Stuyfzand_LMM_broad_output_dataframe.rds")
 
-  # save(with_all_calculated_conductivity,file="data/with_all_calculated_conductivity.rda")
-  if (outputstyle == "Stuyfzand") {
-    # input_groundwaterconductivity <- ReadListPointComma(inputfilename)
-
-    # inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
-    # newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
+    if (outputstyle == "Stuyfzand") {
     mycols <- c(
       "myrownames", "xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg",
       "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn",
@@ -629,14 +552,10 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     b <- merge(input_groundwaterconductivity, a, by = "no", suffixes = c("_mg/L", "_meq/L"))
     b$percentage <- round(100 * (b$rk20 - b$k20) / b$k20, 0)
     minimaloutput <- b[, c("no", "k20", "rk20", "percentage", "meth_")]
-    # WriteListPointComma(minimaloutput, filename = "data/Stuyfzand_minimal_output.csv")
     with_calculated_conductivity <- b
-    # WriteListPointComma(with_calculated_conductivity, filename = newname)
   }
 
   if (outputstyle == "minimal") {
-    # inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
-    # newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
 
     mycols <- c(
       "myrownames", "xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg",
@@ -662,12 +581,6 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     a <- with_all_calculated_conductivity[, selectedcols]
     a[, mydatacols] <- round(a[, mydatacols], 2)
     with_calculated_conductivity <- a
-    # if (substring(newname, nchar(newname) - 2, nchar(newname)) == "csv") {
-    #   # WriteListPointComma(with_calculated_conductivity, filename = newname)
-    # }
-    # if (substring(newname, nchar(newname) - 2, nchar(newname)) == "rds") {
-    #   saveRDS(with_calculated_conductivity, file = newname)
-    # }
 
   }
 
@@ -677,10 +590,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
     rdsname <- paste0(inputname[1], "_", outputstyle, "_full.rds")
 
-    # save(with_all_calculated_conductivity, file = rdsname)
     mycols <- c(names(LMM_broad_input_groundwaterconductivity), "cl", "so4", "no3", "na", "k", "ca", "mg", "po4", "hco3", "xhco3e", "percentage_xecv_ec25", "ec25", "prinslabel", "ec25_xecv_sr")
     with_calculated_conductivity <- h[, mycols]
-    # WriteListPointComma(with_calculated_conductivity, filename = newname)
   }
 
   save(with_calculated_conductivity,file="with_calculated_conductivity.rda")
