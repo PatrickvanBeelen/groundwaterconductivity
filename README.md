@@ -33,10 +33,10 @@ types.
 ## Installation
 You can install the development version of regexcite from GitHub with:
 
-``` r
+```{r}
 # install.packages("devtools")
 devtools::install_github("PatrickvanBeelen/groundwaterconductivity")
-'''
+```
 
 ## Usage
 ```{r}
@@ -45,7 +45,7 @@ input_groundwaterconductivity <- calculate_conductivity()
 save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda"
 my_Stuyfzand_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="Stuyfzand",celcius=25)
 my_minimal_output<-calculate_conductivity(inputfilename="~/input_groundwaterconductivity.rda",inputstyle="Stuyfzand",outputstyle="minimal",celcius=25)
-'''
+```
 
 
 
