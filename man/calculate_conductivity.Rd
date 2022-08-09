@@ -7,7 +7,7 @@
 calculate_conductivity(
   inputfilename = "data/input_groundwaterconductivity.rda",
   inputstyle = "Stuyfzand",
-  outputstyle = "Stuyfzandstyle",
+  outputstyle = "Stuyfzand",
   celcius = 25
 )
 }
@@ -25,10 +25,10 @@ A dataframe with the calculated conductivities
 }
 \description{
 you will need a data frame with the concentrations of a number of ions
-as shown in data/StuyfzandTable31.csv
+as shown in data/input_groundwaterconductivity
 The calculations can use calcium, chloride, Iran, potassium, magnesium, manganese, sodium, ammonium, nitrate, phosphate, zinc, #' bicarbonate, carbonate in milligrams/liter.
 Aluminum is used in microgram/liter and the pH is used as such.
 The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
 Missing data are assumed to be zero except a missing pH which will be assumed to be 7.
-myoutputdataframe<-calculate_conductivity(inputfilename="data/input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
+myoutputdataframe<-calculate_conductivity(inputfilename="input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
 }

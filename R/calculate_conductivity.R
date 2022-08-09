@@ -346,7 +346,7 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' Calculate the conductivity of groundwater from its ionic composition
 #' @description
 #' you will need a data frame with the concentrations of a number of ions
-#' as shown in data/input_groun
+#' as shown in data/input_groundwaterconductivity
 #' The calculations can use calcium, chloride, Iran, potassium, magnesium, manganese, sodium, ammonium, nitrate, phosphate, zinc, #' bicarbonate, carbonate in milligrams/liter.
 #' Aluminum is used in microgram/liter and the pH is used as such.
 #' The conductivity is calculated at 25°C so the measured conductivity might need some temperature adjustment.
