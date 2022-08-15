@@ -31,12 +31,20 @@ library(groundwaterconductivity)
 
 Whereas the README.Rds file gives you information about what you can do with the groundwaterconductivity package. This manual will show you how to do it. The method is described in a Dutch report by Stuyfzand, P. (1987). Een zeer nauwkeurige berekening van het elektrisch geleidingsvermogen, ter controle en aanvulling van wateranalyses: 2e versie. Rijswijk, KIWA. Table 3.1 of this report is used to test the calculations. The table 3.1 is shown in data/input_groundwaterconductivity.rda
 
-If you have installed the package library(groundwaterconductivity) will load the functions. If you run:
-'''{r}
-myoutputdataframe\<-calculate_conductivity(inputfilename="data/input_groundwaterconductivity.rda",inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25)
-'''
+If you have installed the package according to the README file typing library(groundwaterconductivity) in the R console will load the functions. The standard inputfile can be made by:
 
-The calculations will be performed. You can replace data/input_groundwaterconductivity.rda with your own data.
+```{r}
+input_groundwaterconductivity <- calculate_conductivity() 
+save(input_groundwaterconductivity,file="input_groundwaterconductivity.rda")
+```
+
+If you run:
+
+```{r}
+myoutputdataframe <- calculate_conductivity(inputfilename="input_groundwaterconductivity.rda", inputstyle = "Stuyfzand",outputstyle = "minimal", celcius = 25) 
+```
+
+The calculations will be performed and the standard LMM style inputfile is saved as "LMM_broad_input_groundwaterconductivity.rda" and the standard outputfile as "with_all_calculated_conductivity.rda". The outputstyle "minimal" converts "with_all_calculated_conductivity" into "with_calculated_conductivity.rda". You can replace input_groundwaterconductivity.rda with your own data.
 
 ## Data input
 
@@ -92,7 +100,7 @@ Stuyfzand measured the conductivity at 20°C and expressed it in micro Siemens/c
 
 Hence, the calculated conductivity rk20 at 20°C can be converted to the calculated conductivity ec25 at 25°C using: ec25 = 0.1 \* rk20/ \[1-0.023 \* (25-20)\]
 
-The data input results in a standard broad LMM style input file like data/Table_Stuyfzand_LMM_broad_input_groundwaterconductivity.rds It has all the necessary input parameters mentioned in table 1. This makes it possible to check whether the input parameters are correct.
+The data input results in a standard broad LMM style input file like LMM_broad_input_groundwaterconductivity.rda It has all the necessary input parameters mentioned in table 1. This makes it possible to check whether the input parameters are correct.
 
 ## Missing data and pH
 
@@ -100,7 +108,7 @@ The parameters that are not provided are set to zero except for the pH which is 
 
 ## Data output
 
-The data output results in a standard broad LMM style output file like data/Table_Stuyfzand_LMM_broad_output_dataframe.rds It has 73 parameters mentioned in table 2.
+The data output results in a standard broad LMM style output file named with_all_calculated_conductivity.rda It has 73 parameters mentioned in table 2.
 
 Table 2 Output headings
 
@@ -270,19 +278,19 @@ Table 2 Output headings
 
 : Output headings
 
-The data generally have a logarithmically transformed normal distribution. The higher values show higher differences but the relative differences remain constant at higher values. For example duplicate measurements may have a 10% error over a wide range of concentrations. The value of standard residues of log transformed data shows whether the data really deviate. 95% of the data fall between -2 and +2. When ec25_xecv_sr \> 2 the calculated conductivity is much higher than the measured one. When the skat_san_sr \< (-2) there is an excess of anions. When the calculated conductivity is much higher than the measured one and the ion balance has an excess of anions, then the anion with the maximum concentration of milliequivalents is suspect.
+The data generally have a logarithmically transformed normal distribution. The higher values show higher differences but the relative differences remain constant at higher values. For example duplicate measurements may have a 10% error over a wide range of concentrations. The value of standard residues of log transformed data shows whether the data really deviate. 95% of the data fall between -2 and +2. When ec25_xecv_sr \> 2 the calculated conductivity is much higher than the measured one. When the skat_san_sr \< (-2) there is an excess of anions. When the calculated conductivity is much higher than the measured one and the ion balance has an excess of anions, then the anion with the maximum concentration of milli-equivalents is suspect.
 
 ## Output style Stuyfzand
 
-The output style Stuyfzand is a specialized output style to compare the results of the calculated conductivity k20 from the report of Stuyfzand with the calculated conductivity rk20 in this groundwaterconductivity::calculate_conductivity.R script. Both are expressed in micro Siemens/centimeter at 20°C. The percentage column is calculated as 100\*(rk20-k20)/k20 and rounded to zero digits. In the file Stuyfzand_minimal_output.csv the comparison between the report of Stuyfzand and our script is shown. Generally the difference is less than 2% except for row 3, row 5 and row 7 where it is 5%, 45 and 8%. These three rows use the first method of Rossum and have very low conductivities . The five other rows using this method gave much more accurate results.
+The output style Stuyfzand is a specialized output style to compare the results of the calculated conductivity k20 from the report of Stuyfzand with the calculated conductivity rk20 in this groundwaterconductivity::calculate_conductivity.R script. Both are expressed in micro Siemens/centimeter at 20°C. The percentage column is calculated as 100\*(rk20-k20)/k20 and rounded to zero digits. In the file with_calculated_conductivity.rda the comparison between the report of Stuyfzand and our script is shown. Generally the difference is less than 2% except for row 3, row 5 and row 7 where it is 5%, 45 and 8%. These three rows use the first method of Rossum and have very low conductivities . The five other rows using this method gave much more accurate results.
 
 ## Output style minimal
 
-The minimal output style is a selection of the Table_Stuyfzand_LMM_broad_output_dataframe.rds with the input values in milligrams/liter as in table 1 LMM style (xcl to xzn). A selected minimal number of output headings is shown with the dimensions expressed in table 2.
+The minimal output style is a selection of the with_all_calculated_conductivity.rda with the input values in milligrams/liter as in table 1 LMM style (xcl to xzn). A selected minimal number of output headings is shown with the dimensions expressed in table 2. The output is again saved as with_calculated_conductivity.rda
 
 ## Add bicarbonate
 
-The bicarbonate anion is in equilibrium with CO2 gas from the air. It therefore can escape from sampling through the air. At the LMM monitoring network we have chosen not to sample bicarbonate. In that case the bicarbonate concentration can only be roughly estimated from the ion balance when one assumes that there are equal charge equivalents from cations and anions. In that case the amount of milliequivalents of bicarbonate is equal to the sum of the cations minus the sum of the anions. This can only be performed when there is an excess of cations. For the data control this is not beneficial since we do not actually know the ion balance anymore when there is an excess of cations. Nevertheless when there is an excess of anions the ion balance is still useful and the major anion might be suspect when the calculated conductivity ec25 exceeds the measured conductivity xecv. The input style broadLMM will not have xhco3 and will perform this estimation of bicarbonate.
+The bicarbonate anion is in equilibrium with CO₂ gas from the air. It therefore can escape from sampling through the air. At the LMM monitoring network we have chosen not to sample bicarbonate. In that case the bicarbonate concentration can only be roughly estimated from the ion balance when one assumes that there are equal charge equivalents from cations and anions. In that case the amount of milli-equivalents of bicarbonate is equal to the sum of the cations minus the sum of the anions. This can only be performed when there is an excess of cations. For the data control this is not beneficial since we do not actually know the ion balance anymore when there is an excess of cations. Nevertheless when there is an excess of anions the ion balance is still useful and the major anion might be suspect when the calculated conductivity ec25 exceeds the measured conductivity xecv. The input style broadLMM will not have xhco3 and will perform this estimation of bicarbonate.
 
 ## Add phosphate
 

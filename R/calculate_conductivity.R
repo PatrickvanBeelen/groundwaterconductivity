@@ -469,8 +469,19 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
   if (inputstyle == "broadLGW") {
      add_phosphate <- TRUE
-    add_bicarbonate <- TRUE
+    add_bicarbonate <- FALSE
   }
+
+  if (inputstyle == "KRWQC") {
+    add_phosphate <- FALSE
+    add_bicarbonate <- FALSE
+  }
+
+  if (inputstyle == "general") {
+    add_phosphate <- FALSE
+    add_bicarbonate <- FALSE
+  }
+
   # save standardized inputfile
   save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
   # select proper methods per row
@@ -527,9 +538,19 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
 
   with_all_calculated_conductivity <- h
+  # save standard output file
   save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
+  if (outputstyle == "general") {
+    with_calculated_conductivity=with_all_calculated_conductivity}
 
-    if (outputstyle == "Stuyfzand") {
+  if (outputstyle == "KRWQC") {
+    with_calculated_conductivity=with_all_calculated_conductivity}
+
+  if (outputstyle == "broadLGW") {
+    with_calculated_conductivity=with_all_calculated_conductivity}
+
+
+  if (outputstyle == "Stuyfzand") {
     mycols <- c(
       "myrownames", "xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg",
       "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn",
