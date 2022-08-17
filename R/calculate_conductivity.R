@@ -1,6 +1,13 @@
 globalVariables(c("LMM_broad_input_groundwaterconductivity","celcius","add_bicarbonate","add_phosphate","dataframeuitMaakKolomMeth",
                   "inputfilename","inputstyle","outputstyle","celcius","rk20uitBlanquetIndataframeuitMaakKolomMeth"))
 
+#' loads an RData file use variablename<-LoadFileInVariable(filename)
+#' @param fileName the name of the input.rda file
+LoadFileInVariable <- function(fileName) {
+  load(fileName)
+  get(ls()[ls() != "fileName"])
+}
+
 
 #' Prepare for the conductivity calculations by selecting the proper method
 #' @param LMM_broad_input_groundwaterconductivity your input file was converted to the standard inputfile used here
@@ -357,17 +364,23 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' @param outputstyle The layout of the output file
 #' @param celcius The temperature of the measured conductivity
 #' @return A dataframe with the calculated conductivities
-#' @importFrom stats lm na.omit rstandard
+#' @importFrom stats lm na.omit rstandard dplyr tidyr
 #' @export
 calculate_conductivity <- function(inputfilename="data/input_groundwaterconductivity.rda",
                                   inputstyle = "Stuyfzand",
                                    outputstyle = "Stuyfzand",
                                    celcius = 25) {
-  if (inputstyle == "Stuyfzand") {
+  # read file if possible
+  if (file.exists(inputfilename)){
+    input_groundwaterconductivity<-LoadFileInVariable(inputfilename)
+  }
+  # if the input_groundwaterconductivity does not exist and
+  # inputstyle is Stuyfzand we will use the standard Table3.1
+  if (inputstyle=="Stuyfzand"){
+  if (!exists(input_groundwaterconductivity)) {
     # read the original inputfile and save with extra myrownames column
-    if (file.exists(inputfilename)){
-      load(inputfilename)
-          }else{
+    # in dataframe input_groundwaterconductivity which can have different
+    # shapes according to the inputstyle
       input_groundwaterconductivity<-structure(list(no = 1:34,
                      cl = c(5, 32, 4.4, 17.7, 14.9, 83,
                                        15.6, 16.3, 33, 196, 39, 11, 113, 476, 42, 34, 128, 206, 190,
@@ -421,12 +434,6 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
 
     }
-
-
-    {
-
-    }
-
     # good_ec25 <- c(
     #   7.62, 166.53, 51.38, 142.6, 57.17, 182.97, 65.26, 140.65, 82.02,
     #   115.11, 190.82, 36.61, 737.73, 293.23, 826.06, 296.6, 551.47,
@@ -463,25 +470,73 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   }
 
   if (inputstyle == "broadLMM") {
+
+    LMM_broad_input_groundwaterconductivity <- input_groundwaterconductivity
     add_phosphate <- FALSE
     add_bicarbonate <- TRUE
   }
 
   if (inputstyle == "broadLGW") {
+
+    LMM_broad_input_groundwaterconductivity <- input_groundwaterconductivity
      add_phosphate <- TRUE
     add_bicarbonate <- FALSE
   }
 
   if (inputstyle == "KRWQC") {
+    # this is a long style with parameter names in the column parameter
+    # remove not measured
+    m=input_groundwaterconductivity %>% drop_na(waarde) %>% mutate(cen=(detectieteken=="<"))
+    # measurements below detection limit are set to zero
+    m[m$cen,"waarde"]=0
+    # make broad layout and replace NA with 0
+    z=pivot_wider(m,id_cols=c("monsterid", "jaar", "maand", "dag", "filter", "putcode"),
+                  names_from = parameter, values_from = waarde) %>%
+      mutate_all(~replace_na(.,0))
+    myrownames <- row.names(z)
+    s <- cbind(z, myrownames)
+    # these names are needed for the calculation
+    matrixnamen <- c("xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg", "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn", "xhco3", "xco3", "myrownames")
+    # make an empty matrix to fill in the measurement values
+    l <- data.frame(matrix(nrow = length(s[, 1]), ncol = length(matrixnamen), 0))
+    names(l) <- matrixnamen
+    # both measured in µg/Liter
+    l$xal=s$Al
+
+    l$xca=s$Ca
+    l$xcl=s$Cl
+    l$xfe=s$Fe
+    l$xhv=s$pH
+    l$xk=s$K
+    l$xmg=s$Mg
+    l$xmn=s$Mn
+    l$xna=s$Na
+    l$xnh4=s$NH4
+    l$xno3=s$NO3
+    # all phoshorus is phosphate
+    l$xpo4=s$ptot_p
+
+    l$xso4=s$SO4
+    # both measured in the field and corrected to 25 Celcius
+    l$xecv=s$ec_5__veld
+
+    l$xzn=s$Zn
+    l$xhco3=s$hco3_veld
+    l$xco3=0
+    l$myrownames=s$monsterid
+
+    LMM_broad_input_groundwaterconductivity <- l
     add_phosphate <- FALSE
     add_bicarbonate <- FALSE
   }
 
   if (inputstyle == "general") {
+    LMM_broad_input_groundwaterconductivity <- input_groundwaterconductivity
     add_phosphate <- FALSE
     add_bicarbonate <- FALSE
   }
-
+  # replace NA with 0
+  LMM_broad_input_groundwaterconductivity<-LMM_broad_input_groundwaterconductivity %>% mutate_all(~replace_na(.,0))
   # save standardized inputfile
   save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
   # select proper methods per row
@@ -500,7 +555,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     h$xecv <- 0.10 * h$k20 / (1 - 0.023 * 5)
   }
   # remove rows without proper data
-  myrows <- h$xecv > 0 & !h$meth == "leeg" & h$ec25 > 0 & !h$ec25 == Inf
+  myrows <- h$xecv > 0 & h$ec25 > 0
   myrows[is.na(myrows)] <- FALSE
   mlm <- lm(log10(h[myrows, "ec25"]) ~ log10(h[myrows, "xecv"]))
   h[myrows, "ec25_xecv_sr"] <- rstandard(mlm)
@@ -531,12 +586,11 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   h$suspect <- "none"
   # When the calculated conductivity is much higher than the measured one and the ion balance has an excess of kations,
   # then the kation with the maximum concentration of milliequivalents is suspect.
-  h[h$ec25_xecv_sr > 2 & h$skat_san_sr > 2, "suspect"] <- "max_kation"
+  h[myrows&h$ec25_xecv_sr > 2 & h$skat_san_sr > 2, "suspect"] <- "max_kation"
 
   # When the calculated conductivity is much higher than the measured one and the ion balance has an excess of anions,
   # then the anion with the maximum concentration of milliequivalents is suspect.
-  h[h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
-
+  h[myrows&h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
   with_all_calculated_conductivity <- h
   # save standard output file
   save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
