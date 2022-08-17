@@ -1,5 +1,6 @@
-globalVariables(c("LMM_broad_input_groundwaterconductivity","celcius","add_bicarbonate","add_phosphate","dataframeuitMaakKolomMeth",
-                  "inputfilename","inputstyle","outputstyle","celcius","rk20uitBlanquetIndataframeuitMaakKolomMeth"))
+globalVariables(c("LMM_broad_input_groundwaterconductivity","input_groundwaterconductivity","celcius","add_bicarbonate","add_phosphate","dataframeuitMaakKolomMeth",
+                  "inputfilename","inputstyle","outputstyle","celcius","rk20uitBlanquetIndataframeuitMaakKolomMeth",
+                  "detectieteken","parameter","waarde"))
 
 #' loads an RData file use variablename<-LoadFileInVariable(filename)
 #' @param fileName the name of the input.rda file
@@ -364,7 +365,9 @@ Rossum <- function(dataframeuitMaakKolomMeth = dataframeuitMaakKolomMeth) {
 #' @param outputstyle The layout of the output file
 #' @param celcius The temperature of the measured conductivity
 #' @return A dataframe with the calculated conductivities
-#' @importFrom stats lm na.omit rstandard dplyr tidyr
+#' @importFrom stats lm na.omit rstandard
+#' @import dplyr
+#' @import tidyr
 #' @export
 calculate_conductivity <- function(inputfilename="data/input_groundwaterconductivity.rda",
                                   inputstyle = "Stuyfzand",
@@ -377,7 +380,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   # if the input_groundwaterconductivity does not exist and
   # inputstyle is Stuyfzand we will use the standard Table3.1
   if (inputstyle=="Stuyfzand"){
-  if (!exists(input_groundwaterconductivity)) {
+  if (!exists("input_groundwaterconductivity")) {
     # read the original inputfile and save with extra myrownames column
     # in dataframe input_groundwaterconductivity which can have different
     # shapes according to the inputstyle
@@ -434,15 +437,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
 
     }
-    # good_ec25 <- c(
-    #   7.62, 166.53, 51.38, 142.6, 57.17, 182.97, 65.26, 140.65, 82.02,
-    #   115.11, 190.82, 36.61, 737.73, 293.23, 826.06, 296.6, 551.47,
-    #   272.57, 663.96, 1110, 1670.92, 938.41, 6.15, 1308.44, 1256.22,
-    #   4073, 7625.13, 24358.73, 23.96, 8.26, 38.78, 10.41, 33.16, 56.51
-    # )
-    #
-
-    myrownames <- row.names(input_groundwaterconductivity)
+    myrownames <- as.numeric(row.names(input_groundwaterconductivity))
     s <- cbind(input_groundwaterconductivity, myrownames)
     matrixnamen <- c("xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg", "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn", "xhco3", "xco3", "myrownames")
     l <- data.frame(matrix(nrow = length(s[, 1]), ncol = length(matrixnamen), 0))
@@ -491,8 +486,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     m[m$cen,"waarde"]=0
     # make broad layout and replace NA with 0
     z=pivot_wider(m,id_cols=c("monsterid", "jaar", "maand", "dag", "filter", "putcode"),
-                  names_from = parameter, values_from = waarde) %>%
-      mutate_all(~replace_na(.,0))
+                  names_from = parameter, values_from = waarde)
+    z<-z[is.na(z)] <- 0
     myrownames <- row.names(z)
     s <- cbind(z, myrownames)
     # these names are needed for the calculation
