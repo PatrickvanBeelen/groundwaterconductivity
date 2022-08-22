@@ -48,6 +48,7 @@ docs
 *.csv
 *.xlsx
 *.pdf
+*.rda
 groundwaterconductivity.Rproj
 .Rbuildignore
 test/
