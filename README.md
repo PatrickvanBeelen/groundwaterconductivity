@@ -169,13 +169,13 @@ output style has a number of column names:
 
 When the calculated conductivity deviates strongly from the measured
 conductivity something might be wrong. It can be the measured
-conductivity or some of the contributing cations or anions.
-When also the ion balance is off it becomes more probable that there is
-a mistake in the measurement of cations or anions. The script calculates
-the ion balance and the cations and anions that contribute most to the
+conductivity or some of the contributing cations or anions. When also
+the ion balance is off it becomes more probable that there is a mistake
+in the measurement of cations or anions. The script calculates the ion
+balance and the cations and anions that contribute most to the
 conductivity. When the calculated conductivity is much higher than the
 measured one and the ion balance has an excess of anions then the
-maximal anion is suspect to be a
-measurement error. This is indicated in the output.
+maximal anion is suspect to be a measurement error. This is indicated in
+the output.
 
 The vignette vignettes/groundwaterconductivity.Rmd gives more details.
