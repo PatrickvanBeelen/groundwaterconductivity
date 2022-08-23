@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/934472/b3e173298eca4c50b9311a283b8ea99d
+bundleId: https://api.rpubs.com/api/v1/document/934472/b3e173298eca4c50b9311a283b8ea99d
+url: http://rpubs.com/PatrickvanBeelen/934472
+when: 1661262113.12354
+lastSyncTime: 1661262113.12356
