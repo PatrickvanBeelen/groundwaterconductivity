@@ -178,6 +178,7 @@ measured one and the ion balance has an excess of anions then the
 maximal anion is suspect to be a measurement error. This is indicated in
 the output.
 
+# More info in the wiki
 The
 [groundwaterconductivity/wiki](https://github.com/PatrickvanBeelen/groundwaterconductivity/wiki)
 gives a poster of the conference of Land Use and Water Quality which
