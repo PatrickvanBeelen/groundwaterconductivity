@@ -178,5 +178,9 @@ measured one and the ion balance has an excess of anions then the
 maximal anion is suspect to be a measurement error. This is indicated in
 the output.
 
-[The vignette](https://rpubs.com/PatrickvanBeelen/934472)
-vignettes/groundwaterconductivity.Rmd gives more details.
+The
+[groundwaterconductivity/wiki](https://github.com/PatrickvanBeelen/groundwaterconductivity/wiki)
+gives a poster of the conference of Land Use and Water Quality which
+compares this R script with the conductivity calculations in the PHREEQC
+programme of US Geological Survey. Also the original Dutch Stuyfzand
+report is shown and the published groundwaterconductivity vignette.
