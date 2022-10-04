@@ -535,6 +535,12 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     add_phosphate <- FALSE
     add_bicarbonate <- FALSE
   }
+  # add myrownames if not present
+  if (!"myrownames"%in%names(LMM_broad_input_groundwaterconductivity)){
+    myrownames <- as.numeric(row.names(LMM_broad_input_groundwaterconductivity))
+    LMM_broad_input_groundwaterconductivity <- cbind(LMM_broad_input_groundwaterconductivity, myrownames)
+  }
+
   # replace NA with 0
   LMM_broad_input_groundwaterconductivity<-LMM_broad_input_groundwaterconductivity %>% mutate_if(is.numeric,~replace_na(.,0))
   # save standardized inputfile
@@ -598,6 +604,40 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   if (writefiles){
   save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
   }
+
+  names_with_all_calculated_conductivity<-c("myrownames", "nr", "jb", "no", "nm", "ob", "wt", "cron", "rhg",
+    "nle", "ptc", "labor", "jdecl", "xal", "xas", "xba", "xca", "xcd",
+    "xcl", "xcr", "xcu", "xdoc", "xfe", "xk", "xmg", "xmn", "xna",
+    "xnh4", "xni", "xno3", "xntot", "xpb", "xpo4", "xptot", "xso4",
+    "xsr", "xzn", "nieuw", "ditjaardeelnemer", "trendplaatjeswt",
+    "wtob", "xecv", "xh3ov", "xno2v", "xno3v", "hco3", "cl", "so4",
+    "no3", "co3", "h3o", "na", "k", "ca", "mg", "nh4", "fe", "mn",
+    "al", "zn", "po4", "pos", "neg", "ib", "oh", "san", "skat", "mu",
+    "sqmu", "gam2", "alM", "so4M", "DO", "tmp", "also4", "alF", "aloh",
+    "aloh2", "alZ", "san2", "skat2", "sgem", "rcl", "rhco3", "rso4",
+    "rno3", "meth", "meth_", "rk20", "ec25", "ec25_xecv_sr", "pxecv",
+    "pec25", "prinslabel", "percentage_xecv_ec25", "skat_san_sr",
+    "max_anion", "max_anion_name", "max_kation", "max_kation_name",
+    "suspect")
+
+  i=c("myrownames", "nr", "jb", "no", "nm", "ob", "wt", "cron", "rhg",
+                                            "nle", "ptc", "labor", "jdecl", "xal", "xas", "xba", "xca", "xcd",
+                                            "xcl", "xcr", "xcu", "xdoc", "xfe", "xk", "xmg", "xmn", "xna",
+                                            "xnh4", "xni", "xno3", "xntot", "xpb", "xpo4", "xptot", "xso4",
+                                            "xsr", "xzn", "nieuw", "ditjaardeelnemer", "trendplaatjeswt",
+                                            "wtob", "xecv", "xh3ov", "xno2v", "xno3v", "hco3", "cl", "so4",
+                                            "no3", "co3", "h3o", "na", "k", "ca", "mg", "nh4", "fe", "mn",
+                                            "al", "zn", "po4", "pos", "neg", "ib", "oh", "san", "skat", "mu",
+                                            "sqmu", "gam2", "alM", "so4M", "DO", "tmp", "also4", "alF", "aloh",
+                                            "aloh2", "alZ", "san2", "skat2", "sgem", "rcl", "rhco3", "rso4",
+                                            "rno3", "meth", "meth_", "rk20", "ec25", "ec25_xecv_sr", "pxecv",
+                                            "pec25", "prinslabel", "percentage_xecv_ec25", "skat_san_sr",
+                                            "max_anion", "max_anion_name", "max_kation", "max_kation_name",
+                                            "suspect")
+
+
+
+
   if (outputstyle == "general") {
     with_calculated_conductivity=with_all_calculated_conductivity}
 
@@ -636,7 +676,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
 
   if (outputstyle == "minimal") {
 
-    mycols <- c(
+    wish_cols <- c(
       "myrownames", "xal", "xca", "xcl", "xfe", "xhv", "xk", "xmg",
       "xmn", "xna", "xnh4", "xno3", "xpo4", "xso4", "xecv", "xzn",
       "xhco3", "xco3", "hco3", "cl", "so4", "no3", "co3", "h3o", "na",
@@ -648,12 +688,14 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
       "percentage_xecv_ec25", "skat_san_sr", "max_anion", "max_anion_name",
       "max_kation", "max_kation_name", "suspect"
     )
-    mysuperfluouscols <- c(
+mycols<-wish_cols[wish_cols%in%names_with_all_calculated_conductivity]
+    wishsuperfluouscols <- c(
       "pos",
       "neg", "ib", "oh", "mu", "sqmu", "gam2", "san", "skat", "alM",
       "so4M", "DO", "tmp", "also4", "alF", "aloh", "aloh2", "alZ",
       "san2", "skat2", "sgem", "rcl", "rhco3", "rso4", "rno3", "meth", "rk20", "pxecv", "pec25", "prinslabel", "percentage_xecv_ec25"
     )
+    mysuperfluouscols <- wishsuperfluouscols[wishsuperfluouscols%in%names_with_all_calculated_conductivity]
     mycharactercols <- c("myrownames", "meth_", "prinslabel", "max_kation_name", "max_anion_name", "suspect")
     selectedcols <- mycols[!mycols %in% mysuperfluouscols]
     mydatacols <- selectedcols[!selectedcols %in% mycharactercols]
@@ -664,12 +706,13 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   }
 
 
-  if (outputstyle == "BroadLMM") {
+  if (outputstyle == "broadLMM") {
     inputname <- unlist(strsplit(inputfilename, split = ".", fixed = T))
     newname <- paste0(inputname[1], "_", outputstyle, ".", inputname[2])
     rdsname <- paste0(inputname[1], "_", outputstyle, "_full.rds")
 
-    mycols <- c(names(LMM_broad_input_groundwaterconductivity), "cl", "so4", "no3", "na", "k", "ca", "mg", "po4", "hco3", "xhco3e", "percentage_xecv_ec25", "ec25", "prinslabel", "ec25_xecv_sr")
+    wish_cols <- c(names(LMM_broad_input_groundwaterconductivity), "cl", "so4", "no3", "na", "k", "ca", "mg", "po4", "hco3", "percentage_xecv_ec25", "ec25", "prinslabel", "ec25_xecv_sr")
+    mycols<-wish_cols[wish_cols%in%names_with_all_calculated_conductivity]
     with_calculated_conductivity <- h[, mycols]
   }
   if (writefiles){
@@ -678,3 +721,10 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   return(with_calculated_conductivity)
 }
 
+# library(tidyverse)
+# metveldgemiddelden=readRDS('data/metveldgemiddelden.rds')
+# # nieuwe geleidbaarheidsberekening
+# input_groundwaterconductivity=metveldgemiddelden
+# metgeleidbaarheid=calculate_conductivity(inputfilename = 'zot.rda',inputstyle = "broadLMM",outputstyle = "minimal",celcius=25)
+# Oude geleidbaarheidsberekening: metgeleidbaarheid=BerekenGeleidbaarheid(metveldgemiddelden=metveldgemiddelden,celcius=25,add_bicarbonate = TRUE,add_phosphate=FALSE)
+# maakt
