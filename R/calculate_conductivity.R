@@ -373,9 +373,8 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
                                   inputstyle = "Stuyfzand",
                                    outputstyle = "Stuyfzand",
                                    celcius = 25) {
-
+  writefiles=FALSE
   if (!exists("input_groundwaterconductivity")){
-    writefiles=FALSE
     # read file if possible
     if (file.exists(inputfilename)){
       input_groundwaterconductivity<-LoadFileInVariable(inputfilename)
@@ -493,7 +492,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     # make broad layout and replace NA with 0
     z=pivot_wider(m,id_cols=c("monsterid", "jaar", "maand", "dag", "filter", "putcode"),
                   names_from = parameter, values_from = waarde)
-    z<-z[is.na(z)] <- 0
+    z[is.na(z)] <- 0
     myrownames <- row.names(z)
     s <- cbind(z, myrownames)
     # these names are needed for the calculation
