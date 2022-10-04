@@ -536,7 +536,7 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     add_bicarbonate <- FALSE
   }
   # replace NA with 0
-  LMM_broad_input_groundwaterconductivity<-LMM_broad_input_groundwaterconductivity %>% mutate_all(~replace_na(.,0))
+  LMM_broad_input_groundwaterconductivity<-LMM_broad_input_groundwaterconductivity %>% mutate_if(is.numeric,~replace_na(.,0))
   # save standardized inputfile
   if (writefiles){
   save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
