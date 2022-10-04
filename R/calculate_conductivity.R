@@ -373,10 +373,16 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
                                   inputstyle = "Stuyfzand",
                                    outputstyle = "Stuyfzand",
                                    celcius = 25) {
-  # read file if possible
-  if (file.exists(inputfilename)){
-    input_groundwaterconductivity<-LoadFileInVariable(inputfilename)
+
+  if (!exists("input_groundwaterconductivity")){
+    writefiles=FALSE
+    # read file if possible
+    if (file.exists(inputfilename)){
+      input_groundwaterconductivity<-LoadFileInVariable(inputfilename)
+      writefiles=TRUE
+    }
   }
+
   # if the input_groundwaterconductivity does not exist and
   # inputstyle is Stuyfzand we will use the standard Table3.1
   if (inputstyle=="Stuyfzand"){
@@ -533,7 +539,9 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   # replace NA with 0
   LMM_broad_input_groundwaterconductivity<-LMM_broad_input_groundwaterconductivity %>% mutate_all(~replace_na(.,0))
   # save standardized inputfile
+  if (writefiles){
   save(LMM_broad_input_groundwaterconductivity, file = "LMM_broad_input_groundwaterconductivity.rda")
+  }
   # select proper methods per row
   dataframeuitMaakKolomMeth <- MaakKolomMeth(LMM_broad_input_groundwaterconductivity = LMM_broad_input_groundwaterconductivity, celcius = celcius, add_bicarbonate = add_bicarbonate, add_phosphate = add_phosphate)
   rk20uitBlanquetIndataframeuitMaakKolomMeth <- Blanquet(dataframeuitMaakKolomMeth)
@@ -588,7 +596,9 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
   h[myrows&h$ec25_xecv_sr > 2 & h$skat_san_sr < (-2), "suspect"] <- "max_anion"
   with_all_calculated_conductivity <- h
   # save standard output file
+  if (writefiles){
   save(with_all_calculated_conductivity, file = "with_all_calculated_conductivity.rda")
+  }
   if (outputstyle == "general") {
     with_calculated_conductivity=with_all_calculated_conductivity}
 
@@ -663,9 +673,9 @@ calculate_conductivity <- function(inputfilename="data/input_groundwaterconducti
     mycols <- c(names(LMM_broad_input_groundwaterconductivity), "cl", "so4", "no3", "na", "k", "ca", "mg", "po4", "hco3", "xhco3e", "percentage_xecv_ec25", "ec25", "prinslabel", "ec25_xecv_sr")
     with_calculated_conductivity <- h[, mycols]
   }
-
+  if (writefiles){
   save(with_calculated_conductivity,file="with_calculated_conductivity.rda")
-
+  }
   return(with_calculated_conductivity)
 }
 
