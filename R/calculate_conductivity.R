@@ -721,10 +721,3 @@ mycols<-wish_cols[wish_cols%in%names_with_all_calculated_conductivity]
   return(with_calculated_conductivity)
 }
 
-# library(tidyverse)
-# metveldgemiddelden=readRDS('data/metveldgemiddelden.rds')
-# # nieuwe geleidbaarheidsberekening
-# input_groundwaterconductivity=metveldgemiddelden
-# metgeleidbaarheid=calculate_conductivity(inputfilename = 'zot.rda',inputstyle = "broadLMM",outputstyle = "minimal",celcius=25)
-# # Oude geleidbaarheidsberekening: metgeleidbaarheid=BerekenGeleidbaarheid(metveldgemiddelden=metveldgemiddelden,celcius=25,add_bicarbonate = TRUE,add_phosphate=FALSE)
-# # maakt
